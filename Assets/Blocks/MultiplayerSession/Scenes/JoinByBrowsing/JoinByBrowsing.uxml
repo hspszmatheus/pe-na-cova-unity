@@ -1,0 +1,19 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="CurrentSession" src="project://database/Assets/Blocks/CommonSession/UI/CurrentSession.uxml?fileID=9197481963319205126&amp;guid=6a55f10912d74d3449f68f82c91df9d2&amp;type=3#CurrentSession"/>
+    <ui:Template name="SessionBrowser" src="project://database/Assets/Blocks/MultiplayerSession/UI/SessionBrowser.uxml?fileID=9197481963319205126&amp;guid=f67ff1032230bd044bd68df85daae0ad&amp;type=3#SessionBrowser"/>
+    <ui:VisualElement data-source="project://database/Assets/Blocks/MultiplayerSession/Settings/SessionSettings.asset?fileID=11400000&amp;guid=0bf4e1684added44da254017c7fc41b2&amp;type=2#SessionSettings" name="MainContainer" style="flex-grow: 1; flex-direction: row; justify-content: center; align-items: center;">
+        <ui:VisualElement name="LeftColumn" style="flex-direction: column; margin-right: 20px;">
+            <ui:VisualElement name="NameContainer" class="blocks-modal" style="margin-bottom: 20px;">
+                <ui:Label text="DIGITE SEU NOME" name="Label" class="blocks-header blocks-header--space-bottom"/>
+                <ui:VisualElement style="flex-direction: row;">
+                    <ui:TextField label="" placeholder-text="Digite seu nome..." name="input-player-name" class="blocks-element-space-right blocks-textfield unity-text-field unity-base-text-field unity-base-field--no-label unity-base-field" style="width: 210px;"/>
+                    <ui:Button text="CONFIRMAR" name="btn-confirm-name" class="unity-text-element unity-button blocks-button"/>
+                </ui:VisualElement>
+            </ui:VisualElement>
+            <ui:Instance template="SessionBrowser"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="RightColumn" style="flex-direction: column;">
+            <ui:Instance template="CurrentSession"/>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

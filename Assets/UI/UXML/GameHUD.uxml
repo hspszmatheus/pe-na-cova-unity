@@ -1,0 +1,93 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:Style src="../Styles/GameHUD.uss" />
+    <ui:VisualElement name="hud-root" class="hud-root" picking-mode="Ignore">
+        <!-- Top center shared area: Match Timer, Alive Players and Hunter Lives (Visible to everyone) -->
+        <ui:VisualElement name="top-center-container" class="top-center-container" picking-mode="Ignore">
+            <ui:VisualElement name="hunter-lives-panel" class="hunter-lives-panel" picking-mode="Ignore">
+                <!-- Top Row: Match Countdown Timer & Alive Players Count -->
+                <ui:VisualElement name="match-header-row" class="match-header-row" picking-mode="Ignore">
+                    <ui:VisualElement name="match-timer-badge" class="match-timer-badge" picking-mode="Ignore">
+                        <ui:VisualElement name="match-timer-icon" class="match-timer-icon" picking-mode="Ignore" />
+                        <ui:Label name="match-timer-label" text="05:00" class="match-timer-label" />
+                    </ui:VisualElement>
+                    <ui:VisualElement name="match-header-divider" class="match-header-divider" picking-mode="Ignore" />
+                    <ui:VisualElement name="alive-players-badge" class="alive-players-badge" picking-mode="Ignore">
+                        <ui:VisualElement name="alive-players-icon" class="alive-players-icon" picking-mode="Ignore" />
+                        <ui:Label name="alive-players-label" text="-- VIVOS" class="alive-players-label" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+                <!-- Subtle separator between timer row and hunter lives -->
+                <ui:VisualElement name="hunter-lives-divider" class="hunter-lives-divider" picking-mode="Ignore" />
+
+                <!-- Bottom Area: Hunters Lives Roster (Adaptável para 1, 2 ou 3 Hunters) -->
+                <ui:VisualElement name="hunters-life-roster" class="hunters-life-roster" picking-mode="Ignore">
+                    <ui:VisualElement name="default-hunter-card" class="hunter-life-card" picking-mode="Ignore">
+                        <ui:Label name="hunter-lives-title" text="VIDA DO HUNTER" class="hunter-card-title" />
+                        <ui:VisualElement name="hunter-skulls-container" class="hunter-skulls-container" picking-mode="Ignore">
+                            <ui:VisualElement name="skull-1" class="hunter-skull-icon" picking-mode="Ignore" />
+                            <ui:VisualElement name="skull-2" class="hunter-skull-icon" picking-mode="Ignore" />
+                            <ui:VisualElement name="skull-3" class="hunter-skull-icon" picking-mode="Ignore" />
+                        </ui:VisualElement>
+                        <ui:Label name="hunter-card-status" text="ELIMINADO" class="hunter-card-status" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Bottom-Left Cartoon Controls Card (Adapta para Sobrevivente, A Morte e Fantasma) -->
+        <ui:VisualElement name="role-badge-panel" class="role-badge-panel" picking-mode="Ignore">
+            <ui:VisualElement name="role-badge-card" class="role-badge-card" picking-mode="Ignore">
+                <ui:VisualElement name="role-badge-controls" class="role-badge-controls" picking-mode="Ignore">
+                    <ui:VisualElement class="role-control-chip" picking-mode="Ignore">
+                        <ui:Label name="role-ctrl-1-key" text="ESQ" class="role-control-key" />
+                        <ui:Label name="role-ctrl-1-action" text="Tarefa" class="role-control-action" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="role-control-chip" picking-mode="Ignore">
+                        <ui:Label name="role-ctrl-2-key" text="E" class="role-control-key" />
+                        <ui:Label name="role-ctrl-2-action" text="Chute" class="role-control-action" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="role-control-chip role-control-chip--last" picking-mode="Ignore">
+                        <ui:Label name="role-ctrl-3-key" text="SHIFT" class="role-control-key" />
+                        <ui:Label name="role-ctrl-3-action" text="Correr" class="role-control-action" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Top-right Kill Feed (Indicadores de Eliminação estilo Cartoon - Visível para todos) -->
+        <ui:VisualElement name="kill-feed-container" class="kill-feed-container" picking-mode="Ignore" />
+
+        <!-- Prompt de Proximidade da Task -->
+        <ui:VisualElement name="task-prompt-panel" class="task-prompt-panel" picking-mode="Ignore">
+            <ui:VisualElement name="task-prompt-card" class="task-prompt-card" picking-mode="Ignore">
+                <ui:Label name="task-prompt-label" text="[SEGURE O BOTÃO ESQUERDO] REALIZAR TAREFA" class="task-prompt-label" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Survivor-specific HUD container -->
+        <ui:VisualElement name="survivor-hud-container" class="role-container survivor-container" picking-mode="Ignore" />
+
+        <!-- Hunter-specific HUD container (Crosshair / Mira da Morte / Contagem Regressiva) -->
+        <ui:VisualElement name="hunter-hud-container" class="role-container hunter-container" picking-mode="Ignore">
+            <!-- HUD de Contagem Regressiva dos 5 Segundos (Surgimento dos Céus) -->
+            <ui:VisualElement name="hunter-intro-countdown-panel" class="hunter-intro-countdown-panel" picking-mode="Ignore">
+                <ui:VisualElement name="hunter-countdown-badge" class="hunter-countdown-badge" picking-mode="Ignore">
+                    <ui:VisualElement name="hunter-countdown-glow-ring" class="hunter-countdown-glow-ring" picking-mode="Ignore" />
+                    <ui:Label name="hunter-countdown-number" text="5" class="hunter-countdown-number" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <ui:VisualElement name="hunter-crosshair-container" class="hunter-crosshair-container" picking-mode="Ignore">
+                <ui:VisualElement name="hunter-crosshair" class="hunter-crosshair" picking-mode="Ignore">
+                    <ui:VisualElement name="crosshair-ring" class="crosshair-ring" picking-mode="Ignore" />
+                    <ui:VisualElement name="crosshair-bracket-top" class="crosshair-bracket crosshair-bracket--top" picking-mode="Ignore" />
+                    <ui:VisualElement name="crosshair-bracket-bottom" class="crosshair-bracket crosshair-bracket--bottom" picking-mode="Ignore" />
+                    <ui:VisualElement name="crosshair-bracket-left" class="crosshair-bracket crosshair-bracket--left" picking-mode="Ignore" />
+                    <ui:VisualElement name="crosshair-bracket-right" class="crosshair-bracket crosshair-bracket--right" picking-mode="Ignore" />
+                    <ui:VisualElement name="crosshair-center-dot" class="crosshair-dot" picking-mode="Ignore" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

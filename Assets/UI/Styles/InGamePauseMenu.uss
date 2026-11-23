@@ -1,0 +1,491 @@
+/* ============================================================================
+   End Of The World Hotel - Menu de Pausa In-Game (Tema Cartoon)
+   Combina visualmente com o menu principal (JoinByBrowsingCartoon)
+   ============================================================================ */
+
+.pause-root {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+/* ============================================================================
+   1. INDICADOR CANTO INFERIOR DIREITO ([ESC] MENU)
+   ============================================================================ */
+
+.esc-hint-button {
+    position: absolute;
+    bottom: 22px;
+    right: 24px;
+    height: 40px;
+    padding: 5px 14px 7px 8px;
+    flex-direction: row;
+    align-items: center;
+    background-color: transparent;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_panel_cream.png");
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    border-radius: 10px;
+    transition-property: scale;
+    transition-duration: 0.14s;
+    transition-timing-function: ease-out-back;
+}
+
+.esc-hint-button:hover {
+    scale: 1.04 1.04;
+}
+
+.esc-hint-button:active {
+    scale: 0.96 0.96;
+}
+
+.esc-keycap {
+    padding: 2px 10px 4px 10px;
+    margin-right: 9px;
+    align-items: center;
+    justify-content: center;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_blue.png");
+}
+
+.esc-keycap-text {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    letter-spacing: 0.8px;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+}
+
+.esc-hint-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #3D2414;
+    letter-spacing: 0.5px;
+}
+
+/* ============================================================================
+   2. OVERLAY & CARD CENTRALIZADO RETANGULAR
+   ============================================================================ */
+
+.pause-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(14, 22, 36, 0.55);
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.pause-overlay--visible {
+    display: flex;
+}
+
+.pause-card {
+    width: 480px;
+    padding: 18px 34px 26px 34px;
+    align-items: center;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_panel_cream.png");
+    background-color: transparent;
+}
+
+/* Header Ribbon Azul Central */
+.pause-header-ribbon {
+    min-width: 196px;
+    padding: 8px 30px 12px 30px;
+    margin-top: 2px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_ribbon_blue.png");
+}
+
+.pause-header-title {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    letter-spacing: 1.4px;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+    -unity-text-align: middle-center;
+}
+
+/* Seção Integrada de Volume e Mute */
+.pause-audio-section {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 16px;
+    padding: 8px 16px 8px 14px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_list_bg.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 20;
+    -unity-slice-right: 20;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+}
+
+.btn-mute {
+    width: 38px;
+    height: 38px;
+    padding: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    margin-right: 8px;
+    transition-property: scale;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out-back;
+}
+
+.pause-slider-track-wrap {
+    flex-grow: 1;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.pause-volume-slider {
+    margin: 0;
+    padding: 0;
+    height: 32px;
+}
+
+.pause-volume-slider .unity-base-slider__tracker {
+    background-color: transparent;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_slider_track.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 10;
+    -unity-slice-bottom: 10;
+    height: 16px;
+}
+
+.pause-volume-slider .unity-base-slider__dragger {
+    background-color: transparent;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_slider_knob.png");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+}
+
+.pause-volume-slider .unity-base-slider__dragger-border {
+    display: none;
+}
+
+.pause-volume-percent {
+    min-width: 48px;
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(72, 48, 30);
+    -unity-text-align: middle-right;
+}
+
+.btn-mute:hover {
+    scale: 1.18 1.18;
+}
+
+.btn-mute:active {
+    scale: 0.90 0.90;
+}
+
+.mute-icon {
+    width: 26px;
+    height: 26px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_sound_on.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(82, 54, 34);
+}
+
+.btn-mute--muted .mute-icon {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_sound_off.png");
+    -unity-background-image-tint-color: rgb(214, 60, 42);
+}
+
+.pause-divider {
+    width: 100%;
+    height: 2px;
+    background-color: rgba(164, 134, 98, 0.25);
+    margin-bottom: 22px;
+    border-radius: 1px;
+}
+
+/* ============================================================================
+   3. ACOES PRINCIPAIS (SAIR DA PARTIDA / SAIR DO JOGO)
+   ============================================================================ */
+
+.pause-actions {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.pause-btn {
+    width: 100%;
+    height: 60px;
+    font-size: 19px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.32);
+    -unity-text-align: middle-center;
+    padding-bottom: 5px;
+    background-color: transparent;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    transition-property: scale;
+    transition-duration: 0.14s;
+    transition-timing-function: ease-out-back;
+}
+
+.pause-btn:hover {
+    scale: 1.03 1.03;
+}
+
+.pause-btn:active {
+    scale: 0.96 0.96;
+}
+
+.pause-btn--hud {
+    margin-bottom: 14px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_blue.png");
+}
+
+.pause-btn--hud:hover {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_blue_hover.png");
+}
+
+.pause-btn--hud:active {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_blue.png");
+}
+
+.pause-btn--leave {
+    margin-bottom: 14px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_orange.png");
+}
+
+.pause-btn--leave:hover {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_orange_hover.png");
+}
+
+.pause-btn--leave:active {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_orange_pressed.png");
+}
+
+.pause-btn--quit {
+    margin-bottom: 16px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_red.png");
+}
+
+.pause-btn--quit:hover {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_red_hover.png");
+}
+
+.pause-btn--disabled {
+    opacity: 0.65;
+}
+
+.pause-footer-hint {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #7B5D45;
+    -unity-text-align: middle-center;
+}
+
+/* ============================================================================
+   4. PAINEL DE FIM DE PARTIDA (VITÓRIA / DERROTA TEMA CARTOON)
+   ============================================================================ */
+
+.gameover-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(10, 16, 28, 0.75);
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.gameover-overlay--visible {
+    display: flex;
+}
+
+.gameover-card {
+    width: 540px;
+    padding: 22px 36px 26px 36px;
+    align-items: center;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_panel_cream.png");
+    background-color: transparent;
+    transition-property: scale;
+    transition-duration: 0.28s;
+    transition-timing-function: ease-out-back;
+}
+
+.gameover-badge {
+    width: 76px;
+    height: 76px;
+    align-items: center;
+    justify-content: center;
+    margin-top: -6px;
+    margin-bottom: 8px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_circle_cream.png");
+}
+
+.gameover-badge--defeat {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_circle_hunter.png");
+}
+
+.gameover-icon {
+    width: 44px;
+    height: 44px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_survivors.png");
+}
+
+.gameover-icon--victory {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_survivors.png");
+}
+
+.gameover-icon--defeat {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_skull.png");
+}
+
+.gameover-ribbon {
+    min-width: 250px;
+    padding: 9px 38px 13px 38px;
+    margin-top: 2px;
+    margin-bottom: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.gameover-ribbon--victory {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_ribbon_green.png");
+}
+
+.gameover-ribbon--defeat {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_ribbon_red.png");
+}
+
+.gameover-title {
+    font-size: 26px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    letter-spacing: 1.8px;
+    text-shadow: 0 3px 0 rgba(0, 0, 0, 0.4);
+    -unity-text-align: middle-center;
+}
+
+.gameover-subtitle {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: #3D2414;
+    letter-spacing: 0.8px;
+    margin-top: 6px;
+    margin-bottom: 6px;
+    -unity-text-align: middle-center;
+}
+
+.gameover-description {
+    font-size: 13px;
+    color: #6E5338;
+    margin-bottom: 14px;
+    -unity-text-align: middle-center;
+    white-space: normal;
+}
+
+.gameover-timer-container {
+    width: 100%;
+    margin-bottom: 16px;
+    align-items: center;
+}
+
+.gameover-timer-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.gameover-timer-icon {
+    width: 18px;
+    height: 18px;
+    margin-right: 6px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_clock.png");
+}
+
+.gameover-timer-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #553A26;
+    letter-spacing: 0.4px;
+}
+
+.gameover-progress-track {
+    width: 100%;
+    height: 12px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_slider_track.png");
+    border-radius: 6px;
+    overflow: hidden;
+    padding: 2px;
+}
+
+.gameover-progress-fill {
+    width: 100%;
+    height: 100%;
+    background-color: #38C25D;
+    border-radius: 4px;
+}
+
+.gameover-progress-fill--defeat {
+    background-color: #E24A4A;
+}
+
+.gameover-actions {
+    width: 100%;
+    align-items: stretch;
+}
+
+.btn-gameover-leave {
+    width: 100%;
+    height: 52px;
+    font-size: 17px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    letter-spacing: 0.8px;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.32);
+    -unity-text-align: middle-center;
+    background-color: transparent;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_orange.png");
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    transition-property: scale;
+    transition-duration: 0.14s;
+    transition-timing-function: ease-out-back;
+}
+
+.btn-gameover-leave:hover {
+    scale: 1.03 1.03;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_orange_hover.png");
+}
+
+.btn-gameover-leave:active {
+    scale: 0.96 0.96;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_btn_orange_pressed.png");
+}

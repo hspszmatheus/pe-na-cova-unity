@@ -136,3 +136,11 @@ crashlytics-build.properties
 
 # Auto-generated cache in Assets folder
 /[Aa]ssets/[Ss]ceneDependencyCache*
+
+# Plastic SCM
+.plastic/
+ignore.conf
+
+# Local temporary / scratch files
+scratch/
+

@@ -1,0 +1,61 @@
+<engine:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:engine="UnityEngine.UIElements" xmlns:editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <engine:VisualElement class="blocks-modal room-card-modal">
+        <!-- Ribbon Central Superior do Cabeçalho da Sala -->
+        <engine:VisualElement class="room-header-ribbon">
+            <engine:Label text="SALA DE ESPERA" class="room-header-title" />
+        </engine:VisualElement>
+
+        <!-- Barra de Informações da Sala (Nome da Sessão e Contador de Jogadores) -->
+        <engine:VisualElement class="room-info-bar">
+            <engine:VisualElement class="room-name-box">
+                <engine:Label text="SALA:" class="room-name-prefix" />
+                <Blocks.Sessions.Common.SessionNameLabel class="room-name-value">
+                    <Bindings>
+                        <engine:DataBinding property="SessionType" data-source-path="sessionType" binding-mode="ToTarget"/>
+                    </Bindings>
+                </Blocks.Sessions.Common.SessionNameLabel>
+            </engine:VisualElement>
+            <engine:VisualElement class="room-player-count-pill">
+                <engine:VisualElement class="room-player-count-icon" />
+                <Blocks.Sessions.Common.PlayerCountLabel class="room-player-count-text">
+                    <Bindings>
+                        <engine:DataBinding property="SessionType" binding-mode="ToTarget" data-source-path="sessionType"/>
+                    </Bindings>
+                </Blocks.Sessions.Common.PlayerCountLabel>
+            </engine:VisualElement>
+        </engine:VisualElement>
+
+        <!-- Seção da Lista de Jogadores na Sala -->
+        <engine:VisualElement class="room-players-section">
+            <engine:VisualElement class="room-players-header-row">
+                <engine:VisualElement class="room-players-icon" />
+                <engine:Label text="SOBREVIVENTES NA SALA" class="room-players-section-title" />
+            </engine:VisualElement>
+            <Blocks.Sessions.Common.PlayerListViewElement class="room-player-list-view">
+                <Bindings>
+                    <engine:DataBinding property="SessionType" data-source-path="sessionType" binding-mode="ToTarget"/>
+                </Bindings>
+            </Blocks.Sessions.Common.PlayerListViewElement>
+        </engine:VisualElement>
+
+        <!-- Botões de Ação da Sala -->
+        <engine:VisualElement class="room-actions-container">
+            <engine:Button text="ESTOU PRONTO!" name="btn-ready" class="blocks-button cartoon-btn--orange room-action-btn"/>
+            <engine:Button text="INICIAR PARTIDA" name="btn-start" class="blocks-button cartoon-btn--green room-action-btn"/>
+            <Blocks.Sessions.Common.LeaveSessionButton text="SAIR DA SALA" class="cartoon-btn--red room-action-btn room-leave-btn">
+                <Bindings>
+                    <engine:DataBinding property="SessionType" binding-mode="ToTarget" data-source-path="sessionType"/>
+                </Bindings>
+            </Blocks.Sessions.Common.LeaveSessionButton>
+        </engine:VisualElement>
+
+        <!-- Rodapé com Status da Sala -->
+        <engine:VisualElement class="room-status-footer">
+            <Blocks.Sessions.Common.SessionStatusLabel class="room-status-label">
+                <Bindings>
+                    <engine:DataBinding property="SessionType" data-source-path="sessionType" binding-mode="ToTarget"/>
+                </Bindings>
+            </Blocks.Sessions.Common.SessionStatusLabel>
+        </engine:VisualElement>
+    </engine:VisualElement>
+</engine:UXML>

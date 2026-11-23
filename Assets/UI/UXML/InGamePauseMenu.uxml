@@ -1,0 +1,85 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Styles/InGamePauseMenu.uss" />
+
+    <ui:VisualElement name="pause-root" class="pause-root" picking-mode="Ignore">
+
+        <!-- Indicador fixo no canto superior esquerdo -->
+        <ui:Button name="esc-hint-button" class="esc-hint-button" focusable="false">
+            <ui:VisualElement name="esc-keycap" class="esc-keycap" picking-mode="Ignore">
+                <ui:Label name="esc-keycap-text" text="ESC" class="esc-keycap-text" picking-mode="Ignore" />
+            </ui:VisualElement>
+            <ui:Label name="esc-hint-label" text="ABRIR MENU" class="esc-hint-label" picking-mode="Ignore" />
+        </ui:Button>
+
+        <!-- Overlay centralizado de pausa / opcoes -->
+        <ui:VisualElement name="pause-overlay" class="pause-overlay">
+            <ui:VisualElement name="pause-card" class="pause-card">
+
+                <!-- Titulo em ribbon Cartoon centralizado -->
+                <ui:VisualElement name="pause-header-ribbon" class="pause-header-ribbon" picking-mode="Ignore">
+                    <ui:Label name="pause-header-title" text="OPÇÕES" class="pause-header-title" picking-mode="Ignore" />
+                </ui:VisualElement>
+
+                <!-- Controle de Volume & Mute integrado (Ícone clicável + Slider) -->
+                <ui:VisualElement name="pause-audio-section" class="pause-audio-section">
+                    <ui:Button name="btn-toggle-mute" class="btn-mute" focusable="false" tooltip="Mutar / Desmutar áudio">
+                        <ui:VisualElement name="mute-icon" class="mute-icon" picking-mode="Ignore" />
+                    </ui:Button>
+                    <ui:VisualElement class="pause-slider-track-wrap">
+                        <ui:Slider name="pause-volume-slider" low-value="0" high-value="100" value="100" class="pause-volume-slider" />
+                    </ui:VisualElement>
+                    <ui:Label name="pause-volume-percent" text="100%" class="pause-volume-percent" />
+                </ui:VisualElement>
+
+                <ui:VisualElement class="pause-divider" picking-mode="Ignore" />
+
+                <!-- Duas opcoes principais -->
+                <ui:VisualElement class="pause-actions">
+                    <ui:Button name="btn-toggle-hud" text="OCULTAR HUD (P)" class="pause-btn pause-btn--hud" focusable="false" />
+                    <ui:Button name="btn-leave-match" text="SAIR DA PARTIDA" class="pause-btn pause-btn--leave" focusable="false" />
+                    <ui:Button name="btn-quit-game" text="SAIR DO JOGO" class="pause-btn pause-btn--quit" focusable="false" />
+                </ui:VisualElement>
+
+                <ui:Label name="pause-footer-hint" text="ESC: Voltar ao jogo  •  P: Ocultar / Exibir HUD" class="pause-footer-hint" picking-mode="Ignore" />
+
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- Overlay de Fim de Partida (Vitória / Derrota no tema Cartoon) -->
+        <ui:VisualElement name="gameover-overlay" class="gameover-overlay">
+            <ui:VisualElement name="gameover-card" class="gameover-card">
+
+                <!-- Ícone / Emblema Superior do Fim de Jogo -->
+                <ui:VisualElement name="gameover-badge" class="gameover-badge" picking-mode="Ignore">
+                    <ui:VisualElement name="gameover-icon" class="gameover-icon" picking-mode="Ignore" />
+                </ui:VisualElement>
+
+                <!-- Faixa / Ribbon com Título: VITÓRIA ou DERROTA -->
+                <ui:VisualElement name="gameover-header-ribbon" class="gameover-ribbon gameover-ribbon--victory" picking-mode="Ignore">
+                    <ui:Label name="gameover-title" text="VITÓRIA" class="gameover-title" picking-mode="Ignore" />
+                </ui:VisualElement>
+
+                <!-- Subtítulo com o motivo em português -->
+                <ui:Label name="gameover-subtitle" text="OS SOBREVIVENTES ESCAPARAM!" class="gameover-subtitle" picking-mode="Ignore" />
+
+                <!-- Descrição detalhada do desfecho para o jogador -->
+                <ui:Label name="gameover-description" text="Você completou seus objetivos e sobreviveu à Morte!" class="gameover-description" picking-mode="Ignore" />
+
+                <ui:VisualElement class="pause-divider" picking-mode="Ignore" />
+
+                <!-- Barra de contagem regressiva para retorno ao lobby -->
+                <ui:VisualElement class="gameover-timer-container" picking-mode="Ignore">
+                    <ui:VisualElement class="gameover-timer-row" picking-mode="Ignore">
+                        <ui:VisualElement class="gameover-timer-icon" picking-mode="Ignore" />
+                        <ui:Label name="gameover-timer-label" text="Retornando ao saguão em 5s..." class="gameover-timer-label" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                    <ui:VisualElement class="gameover-progress-track" picking-mode="Ignore">
+                        <ui:VisualElement name="gameover-progress-fill" class="gameover-progress-fill" picking-mode="Ignore" />
+                    </ui:VisualElement>
+                </ui:VisualElement>
+
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

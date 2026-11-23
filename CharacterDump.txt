@@ -1,0 +1,54 @@
+Components:
+- Transform
+- Animator
+
+Children:
+- Character 01
+- Armature
+- mixamorig:Hips
+- mixamorig:LeftUpLeg
+- mixamorig:LeftLeg
+- mixamorig:LeftFoot
+- mixamorig:LeftToeBase
+- mixamorig:LeftToe_End
+- mixamorig:RightUpLeg
+- mixamorig:RightLeg
+- mixamorig:RightFoot
+- mixamorig:RightToeBase
+- mixamorig:RightToe_End
+- mixamorig:Spine
+- mixamorig:Spine1
+- mixamorig:Spine2
+- mixamorig:LeftShoulder
+- mixamorig:LeftArm
+- mixamorig:LeftForeArm
+- mixamorig:LeftHand
+- mixamorig:LeftHandIndex1
+- mixamorig:LeftHandIndex2
+- mixamorig:LeftHandIndex3
+- mixamorig:LeftHandIndex4
+- mixamorig:LeftHandThumb1
+- mixamorig:LeftHandThumb2
+- mixamorig:LeftHandThumb3
+- mixamorig:LeftHandThumb4
+- mixamorig:Neck
+- mixamorig:Head
+- Character 01 Head Parts
+- L Eye
+- L Eyebrow
+- R Eye
+- R Eyebrow
+- mixamorig:HeadTop_End
+- mixamorig:RightShoulder
+- mixamorig:RightArm
+- mixamorig:RightForeArm
+- mixamorig:RightHand
+- mixamorig:RightHandIndex1
+- mixamorig:RightHandIndex2
+- mixamorig:RightHandIndex3
+- mixamorig:RightHandIndex4
+- mixamorig:RightHandThumb1
+- mixamorig:RightHandThumb2
+- mixamorig:RightHandThumb3
+- mixamorig:RightHandThumb4
+- Character 01 (SkinnedMeshRenderer: Character 01)

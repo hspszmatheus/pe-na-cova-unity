@@ -1,0 +1,1060 @@
+/* Root container covering entire screen */
+.hud-root {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Top left shared area: Tasks Progress Bar (Visible to everyone: Players and Hunters) */
+.tasks-progress-panel {
+    position: absolute;
+    top: 24px;
+    left: 24px;
+    width: 250px;
+    flex-direction: column;
+    background-color: rgba(10, 12, 18, 0.88);
+    border-radius: 16px;
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 10px;
+    padding-bottom: 12px;
+    border-width: 1.5px;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
+.tasks-header-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.tasks-icon-box {
+    flex-direction: row;
+    align-items: center;
+}
+
+.tasks-icon {
+    font-size: 15px;
+    margin-right: 6px;
+    color: #38EF7D;
+    -unity-text-align: middle-center;
+}
+
+.tasks-title-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #E2E8F0;
+    letter-spacing: 1.5px;
+    -unity-text-align: middle-left;
+}
+
+.tasks-counter-label {
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: #38EF7D;
+    letter-spacing: 1px;
+    -unity-text-align: middle-right;
+}
+
+.tasks-bar-background {
+    width: 100%;
+    height: 12px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 6px;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.tasks-bar-fill {
+    width: 0%;
+    height: 100%;
+    background-color: #38EF7D;
+    border-radius: 5px;
+    transition-property: width;
+    transition-duration: 0.35s;
+    transition-timing-function: ease-out;
+}
+
+.tasks-bar-fill--completed {
+    background-color: #00F5D4;
+}
+
+/* ========================================================
+   PAINEL DE INATIVIDADE / TEMPO ATÉ REVELAÇÃO DO SOBREVIVENTE
+   ======================================================== */
+.revelation-timer-panel {
+    position: absolute;
+    top: 96px;
+    left: 24px;
+    width: 250px;
+    flex-direction: column;
+    background-color: rgba(10, 12, 18, 0.90);
+    border-radius: 14px;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-width: 1.5px;
+    border-color: rgba(168, 85, 247, 0.40);
+    transition-property: border-color, background-color;
+    transition-duration: 0.3s;
+}
+
+.revelation-header-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.revelation-icon-box {
+    flex-direction: row;
+    align-items: center;
+}
+
+.revelation-icon {
+    font-size: 13px;
+    margin-right: 6px;
+    color: #C084FC;
+    -unity-text-align: middle-center;
+}
+
+.revelation-title-label {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: #E2E8F0;
+    letter-spacing: 1.2px;
+    -unity-text-align: middle-left;
+}
+
+.revelation-countdown-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #C084FC;
+    letter-spacing: 1px;
+    -unity-text-align: middle-right;
+}
+
+.revelation-bar-background {
+    width: 100%;
+    height: 7px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 4px;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.12);
+}
+
+.revelation-bar-fill {
+    width: 100%;
+    height: 100%;
+    background-color: #A855F7;
+    border-radius: 3px;
+    transition-property: width;
+    transition-duration: 0.15s;
+    transition-timing-function: linear;
+}
+
+.revelation-status-sublabel {
+    font-size: 9.5px;
+    -unity-font-style: normal;
+    color: rgba(203, 213, 225, 0.75);
+    margin-top: 4px;
+    -unity-text-align: middle-center;
+    letter-spacing: 0.5px;
+}
+
+/* Top center shared area: Match Timer, Alive Players and Hunter Lives (Visible to everyone) */
+.top-center-container {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* Cream Cartoon Top-Center Card (Shared: Cream for Sobrevivente/Fantasma, Dark Crimson for A Morte) */
+.hunter-lives-panel {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_panel_cream.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 30;
+    -unity-slice-bottom: 30;
+    border-width: 0;
+    border-radius: 0;
+    padding-left: 26px;
+    padding-right: 26px;
+    padding-top: 12px;
+    padding-bottom: 16px;
+    transition-property: background-image, scale;
+    transition-duration: 0.2s;
+}
+
+.hunter-lives-panel--hunter {
+    background-image: url("../Sprites/Cartoon/cartoon_panel_hunter.png");
+}
+
+/* Top Row: Match Countdown Timer and Alive Players */
+.match-header-row {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+}
+
+.match-timer-badge {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-image: url("../Sprites/Cartoon/cartoon_slider_track.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 10;
+    -unity-slice-bottom: 10;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+
+.hunter-lives-panel--hunter .match-timer-badge {
+    background-image: none;
+    background-color: rgba(24, 10, 12, 0.78);
+    border-width: 2px;
+    border-color: rgba(255, 178, 72, 0.50);
+    border-radius: 12px;
+}
+
+.match-timer-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 7px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_clock.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #4A301C;
+}
+
+.hunter-lives-panel--hunter .match-timer-icon {
+    -unity-background-image-tint-color: #FBBF24;
+}
+
+.match-timer-label {
+    font-size: 22px;
+    -unity-font-style: bold;
+    color: #3D2414;
+    letter-spacing: 1.5px;
+    -unity-text-align: middle-center;
+}
+
+.hunter-lives-panel--hunter .match-timer-label {
+    color: #FFF4D6;
+    text-shadow: 0 2px 0 rgba(22, 8, 10, 0.9);
+}
+
+.match-timer-label--urgent {
+    color: #DC2626;
+}
+
+.hunter-lives-panel--hunter .match-timer-label--urgent {
+    color: #FF5252;
+}
+
+.match-header-divider {
+    width: 2px;
+    height: 24px;
+    background-color: rgba(116, 82, 54, 0.25);
+    border-radius: 1px;
+    margin-left: 12px;
+    margin-right: 12px;
+}
+
+.hunter-lives-panel--hunter .match-header-divider {
+    background-color: rgba(255, 196, 128, 0.22);
+}
+
+.alive-players-badge {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_btn_green.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+    border-width: 0;
+    border-radius: 0;
+    padding-left: 14px;
+    padding-right: 14px;
+    padding-top: 5px;
+    padding-bottom: 7px;
+}
+
+.hunter-lives-panel--hunter .alive-players-badge {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_red.png");
+}
+
+.alive-players-icon {
+    width: 19px;
+    height: 19px;
+    margin-right: 6px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_survivors.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #FFFFFF;
+}
+
+.alive-players-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    letter-spacing: 0.8px;
+    -unity-text-align: middle-center;
+    text-shadow: 0 1px 0 rgba(28, 72, 6, 0.85);
+}
+
+.hunter-lives-panel--hunter .alive-players-label {
+    text-shadow: 0 1px 0 rgba(88, 12, 16, 0.9);
+}
+
+/* Subtle horizontal line dividing top header and skulls */
+.hunter-lives-divider {
+    width: 100%;
+    height: 2px;
+    border-radius: 1px;
+    background-color: rgba(116, 82, 54, 0.22);
+    margin-top: 5px;
+    margin-bottom: 6px;
+}
+
+.hunter-lives-panel--hunter .hunter-lives-divider {
+    background-color: rgba(255, 196, 128, 0.18);
+}
+
+/* Bottom Row: Hunter Lives (Cabeças) */
+.hunter-lives-row {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Container for all hunter life cards (adapts dynamically for 1, 2, or 3 hunters) */
+.hunters-life-roster {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.hunter-life-card {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+.hunter-card-title {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: #5B3B24;
+    letter-spacing: 1.2px;
+    margin-bottom: 4px;
+    -unity-text-align: middle-center;
+}
+
+.hunter-lives-panel--hunter .hunter-card-title {
+    color: #FCD34D;
+    text-shadow: 0 1px 0 rgba(20, 8, 10, 0.9);
+}
+
+.hunter-card-divider {
+    width: 2px;
+    height: 48px;
+    background-color: rgba(116, 82, 54, 0.24);
+    border-radius: 1px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.hunter-lives-panel--hunter .hunter-card-divider {
+    background-color: rgba(255, 196, 128, 0.22);
+}
+
+/* Row containing the 3 skull icons for each hunter */
+.hunter-skulls-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Skull head life icon (Active life: alive full hood) */
+.hunter-skull-icon {
+    width: 44px;
+    height: 44px;
+    margin-left: 4px;
+    margin-right: 4px;
+    background-image: url("../Sprites/HunterLifeIcon.png");
+    -unity-background-scale-mode: scale-to-fit;
+    opacity: 1;
+    scale: 1 1;
+    transition-property: opacity, scale;
+    transition-duration: 0.3s;
+    transition-timing-function: ease-out-back;
+}
+
+/* Lost life state: switches asset to cracked/goofy skull head! */
+.hunter-skull-icon--lost {
+    background-image: url("../Sprites/HunterLifeLostIcon.png");
+    opacity: 0.92;
+    scale: 0.94 0.94;
+}
+
+.hunter-card-status {
+    display: none;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    background-color: #DC2626;
+    border-radius: 6px;
+    border-width: 1.5px;
+    border-color: #7F1D1D;
+    padding-left: 7px;
+    padding-right: 7px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    letter-spacing: 1px;
+    margin-top: 3px;
+    -unity-text-align: middle-center;
+}
+
+.hunter-card-status--visible {
+    display: flex;
+}
+
+/* ========================================================
+   BOTTOM-LEFT CARTOON CONTROLS BADGE
+   ======================================================== */
+.role-badge-panel {
+    position: absolute;
+    bottom: 22px;
+    left: 24px;
+}
+
+.role-badge-card {
+    flex-direction: row;
+    align-items: center;
+    min-height: 40px;
+    background-image: url("../Sprites/Cartoon/cartoon_panel_cream.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 30;
+    -unity-slice-bottom: 30;
+    border-width: 0;
+    border-radius: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 8px;
+    padding-bottom: 10px;
+}
+
+.role-badge-card--hunter {
+    background-image: url("../Sprites/Cartoon/cartoon_panel_hunter.png");
+}
+
+.role-badge-controls {
+    flex-direction: row;
+    align-items: center;
+}
+
+.role-control-chip {
+    flex-direction: row;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.role-control-chip--last {
+    margin-right: 0;
+}
+
+.role-control-key {
+    background-color: #E2CEAE;
+    border-width: 1.5px;
+    border-color: #845838;
+    border-radius: 6px;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 1px;
+    padding-bottom: 1px;
+    font-size: 10px;
+    -unity-font-style: bold;
+    color: #3D2414;
+    margin-right: 4px;
+    -unity-text-align: middle-center;
+}
+
+.role-badge-card--hunter .role-control-key {
+    background-color: #2A1214;
+    border-color: #FBBF24;
+    color: #FCD34D;
+}
+
+.role-control-action {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: #5B3B24;
+    -unity-text-align: middle-left;
+}
+
+.role-badge-card--hunter .role-control-action {
+    color: #F5E6D3;
+}
+
+/* Role-specific containers for future UI elements */
+.role-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.survivor-container {
+    /* Reserved for future survivor HUD */
+}
+
+.hunter-container {
+    /* Container exclusivo do HUD do Hunter */
+}
+
+/* ========================================================
+   HUD DE CONTAGEM REGRESSIVA DOS 5 SEGUNDOS (HUNTER SPAWN)
+   ======================================================== */
+.hunter-intro-countdown-panel {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.hunter-countdown-badge {
+    width: 152px;
+    height: 152px;
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_circle_hunter.png");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    border-radius: 0;
+    align-items: center;
+    justify-content: center;
+    scale: 1 1;
+    transition-property: scale;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out;
+}
+
+.hunter-countdown-glow-ring {
+    position: absolute;
+    width: 168px;
+    height: 168px;
+    border-radius: 84px;
+    border-width: 3px;
+    border-color: rgba(255, 182, 48, 0.55);
+}
+
+.hunter-countdown-number {
+    font-size: 78px;
+    -unity-font-style: bold;
+    color: rgb(255, 212, 68);
+    -unity-text-align: middle-center;
+    text-shadow: 0 3px 0 rgba(36, 10, 12, 0.95);
+    margin: 0;
+    padding: 0;
+}
+
+/* Estado de Impacto e Início da Caçada: "COMEÇAR!" */
+.hunter-countdown-badge--start {
+    width: auto;
+    min-width: 286px;
+    height: 92px;
+    border-radius: 0;
+    border-width: 0;
+    padding-left: 34px;
+    padding-right: 34px;
+    padding-bottom: 6px;
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_ribbon_orange.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 26;
+    -unity-slice-right: 26;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+}
+
+.hunter-countdown-number--start {
+    font-size: 36px;
+    letter-spacing: 3px;
+    color: rgb(255, 255, 255);
+    text-shadow: 0 3px 0 rgba(128, 52, 8, 0.95);
+}
+
+/* ========================================================
+   MIRA DO HUNTER (CROSSHAIR / RETÍCULO DE DISPARO DA MORTE)
+   ======================================================== */
+.hunter-crosshair-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.hunter-crosshair {
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition-property: scale, opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out-cubic;
+}
+
+/* Ponto central Cartoon com contorno escuro */
+.crosshair-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 4px;
+    background-color: #FFF8E7;
+    border-width: 2px;
+    border-color: #2A1214;
+    transition-property: background-color, border-color, scale;
+    transition-duration: 0.2s;
+}
+
+/* Anel externo estilo Cartoon */
+.crosshair-ring {
+    position: absolute;
+    width: 34px;
+    height: 34px;
+    border-radius: 17px;
+    border-width: 2px;
+    border-color: rgba(255, 244, 214, 0.45);
+    transition-property: border-color, scale;
+    transition-duration: 0.2s;
+}
+
+/* Suportes direcionais (brackets com contorno cartoon) */
+.crosshair-bracket {
+    position: absolute;
+    background-color: #FFF4D6;
+    border-width: 1px;
+    border-color: #2A1214;
+    border-radius: 2px;
+    transition-property: background-color, translate, scale;
+    transition-duration: 0.2s;
+}
+
+.crosshair-bracket--top {
+    width: 4px;
+    height: 10px;
+    translate: 0 -19px;
+}
+
+.crosshair-bracket--bottom {
+    width: 4px;
+    height: 10px;
+    translate: 0 19px;
+}
+
+.crosshair-bracket--left {
+    width: 10px;
+    height: 4px;
+    translate: -19px 0;
+}
+
+.crosshair-bracket--right {
+    width: 10px;
+    height: 4px;
+    translate: 19px 0;
+}
+
+/* ESTADO DE MIRA ATIVA (AIM MODE - BOTÃO DIREITO PRESSIONADO) */
+.hunter-crosshair--aiming {
+    opacity: 1;
+    scale: 1.06 1.06;
+}
+
+.hunter-crosshair--aiming .crosshair-dot {
+    background-color: #FF6B2B;
+    border-color: #FFF4D6;
+    scale: 1.25 1.25;
+}
+
+.hunter-crosshair--aiming .crosshair-ring {
+    border-color: rgba(255, 118, 42, 0.92);
+    border-width: 2.5px;
+    scale: 0.86 0.86;
+}
+
+.hunter-crosshair--aiming .crosshair-bracket {
+    background-color: #FFB02E;
+    border-color: #421012;
+}
+
+.hunter-crosshair--aiming .crosshair-bracket--top {
+    translate: 0 -14px;
+    height: 11px;
+}
+
+.hunter-crosshair--aiming .crosshair-bracket--bottom {
+    translate: 0 14px;
+    height: 11px;
+}
+
+.hunter-crosshair--aiming .crosshair-bracket--left {
+    translate: -14px 0;
+    width: 11px;
+}
+
+.hunter-crosshair--aiming .crosshair-bracket--right {
+    translate: 14px 0;
+    width: 11px;
+}
+
+/* ========================================================
+   BARRA DE STAMINA (ENERGIA DE CORRIDA)
+   ======================================================== */
+.stamina-container {
+    position: absolute;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    transition-property: opacity;
+    transition-duration: 0.35s;
+    transition-timing-function: ease-in-out;
+}
+
+.stamina-bar-background {
+    width: 220px;
+    height: 7px;
+    background-color: rgba(12, 14, 20, 0.85);
+    border-radius: 4px;
+    border-width: 1px;
+    border-color: rgba(255, 255, 255, 0.25);
+    overflow: hidden;
+    justify-content: center;
+}
+
+.stamina-bar-fill {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(46, 204, 113);
+    border-radius: 3px;
+    transition-property: width, background-color;
+    transition-duration: 0.08s;
+}
+
+.stamina-bar-fill--exhausted {
+    background-color: rgb(231, 76, 60);
+}
+
+/* ========================================================
+   INDICADOR DE COOLDOWN DA BOLA DE FOGO DA MORTE
+   ======================================================== */
+.fireball-cooldown-panel {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.fireball-cooldown-label {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: rgba(255, 210, 120, 0.95);
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.fireball-cooldown-bar-bg {
+    width: 180px;
+    height: 5px;
+    background-color: rgba(10, 12, 18, 0.85);
+    border-radius: 3px;
+    border-width: 1px;
+    border-color: rgba(255, 140, 20, 0.4);
+    overflow: hidden;
+}
+
+.fireball-cooldown-bar-fill {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(255, 140, 0);
+    border-radius: 2px;
+}
+
+/* ========================================================
+   INDICADOR DE COOLDOWN DO CHUTE DO SOBREVIVENTE (15s)
+   ======================================================== */
+.kick-cooldown-panel {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+}
+
+.kick-cooldown-label {
+    font-size: 11px;
+    -unity-font-style: bold;
+    color: rgba(115, 240, 160, 0.95);
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.kick-cooldown-bar-bg {
+    width: 180px;
+    height: 5px;
+    background-color: rgba(10, 12, 18, 0.85);
+    border-radius: 3px;
+    border-width: 1px;
+    border-color: rgba(70, 200, 150, 0.4);
+    overflow: hidden;
+}
+
+.kick-cooldown-bar-fill {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(50, 200, 150);
+    border-radius: 2px;
+}
+
+/* ========================================================
+   KILL FEED - INDICADOR DE ELIMINAÇÕES ESTILO FPS ONLINE
+   ======================================================== */
+.kill-feed-container {
+    position: absolute;
+    top: 24px;
+    right: 24px;
+    width: 410px;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.kill-feed-entry {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_list_item.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 18;
+    -unity-slice-right: 18;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+    border-width: 0;
+    border-radius: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 7px;
+    padding-bottom: 9px;
+    margin-bottom: 8px;
+    opacity: 0;
+    translate: 40px 0;
+    transition-property: opacity, translate;
+    transition-duration: 0.25s;
+    transition-timing-function: ease-out;
+}
+
+.kill-feed-entry--visible {
+    opacity: 1;
+    translate: 0 0;
+}
+
+.kill-feed-entry--fadeout {
+    opacity: 0;
+    translate: 30px 0;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-in;
+}
+
+.kill-feed-killer {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #B91C1C;
+    -unity-text-align: middle-right;
+    letter-spacing: 0.4px;
+}
+
+.kill-feed-killer--survivor {
+    color: #15803D;
+}
+
+.kill-feed-weapon-badge {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_btn_red.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+    padding-left: 9px;
+    padding-right: 9px;
+    padding-top: 4px;
+    padding-bottom: 6px;
+    margin-left: 9px;
+    margin-right: 9px;
+}
+
+.kill-feed-entry--survivor-kill .kill-feed-weapon-badge {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_green.png");
+}
+
+.kill-feed-weapon-icon {
+    width: 17px;
+    height: 17px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_scythe.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #FFFFFF;
+}
+
+.kill-feed-victim {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #3D2414;
+    -unity-text-align: middle-left;
+    letter-spacing: 0.4px;
+}
+
+.kill-feed-victim--hunter {
+    color: #B91C1C;
+}
+
+.kill-feed-skull-badge {
+    width: 17px;
+    height: 17px;
+    margin-left: 8px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_skull.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #DC2626;
+}
+
+/* ==========================================================================
+   Overlay de Interação e Prompt de Tarefa (Hold LMB)
+   ========================================================================== */
+.task-interaction-panel {
+    position: absolute;
+    bottom: 155px;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.task-interaction-title {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #3D2414;
+    letter-spacing: 1.5px;
+    margin-bottom: 6px;
+}
+
+.task-interaction-bar-bg {
+    width: 260px;
+    height: 12px;
+    background-color: #E2D4BC;
+    border-radius: 6px;
+    overflow: hidden;
+    border-width: 1.5px;
+    border-color: #845838;
+    margin-bottom: 5px;
+}
+
+.task-interaction-bar-fill {
+    width: 0%;
+    height: 100%;
+    background-color: #22C55E;
+    border-radius: 5px;
+}
+
+.task-interaction-hint {
+    font-size: 11px;
+    color: #5B3B24;
+    letter-spacing: 1px;
+}
+
+.task-prompt-panel {
+    position: absolute;
+    bottom: 184px;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    display: none;
+}
+
+.task-prompt-card {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_list_item.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 18;
+    -unity-slice-right: 18;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 9px;
+    padding-bottom: 11px;
+    align-items: center;
+    justify-content: center;
+}
+
+.task-prompt-label {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #15803D;
+    letter-spacing: 0.8px;
+    -unity-text-align: middle-center;
+}
+
+.task-prompt-label--completed {
+    color: #7B5D45;
+}

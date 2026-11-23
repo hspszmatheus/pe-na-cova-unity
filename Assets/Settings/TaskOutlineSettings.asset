@@ -1,0 +1,202 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28765dc7302cd49b59c0e9ac8862cf45, type: 3}
+  m_Name: TaskOutlineSettings
+  m_EditorClassIdentifier: LineworkLite::LineworkLite.FreeOutline.FreeOutlineSettings
+  injectionPoint: 600
+  showInSceneView: 1
+  outlines:
+  - {fileID: 8515071944546887470}
+  - {fileID: 3068813056197742063}
+  - {fileID: 5192847192847192847}
+  - {fileID: 7391827401928374651}
+  - {fileID: 9182736450192837465}
+--- !u!114 &3068813056197742063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2cb9e9790a941d3b51ae2615e6e1bd, type: 3}
+  m_Name: TargetTaskOutline
+  m_EditorClassIdentifier: LineworkLite::LineworkLite.FreeOutline.Outline
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 4
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 0
+  maskingStrategy: 0
+  color: {r: 0.85, g: 0.28, b: 1, a: 1}
+  enableOcclusion: 0
+  occludedColor: {r: 0.85, g: 0.28, b: 1, a: 1}
+  blendMode: 0
+  extrusionMethod: 6
+  scaling: 0
+  width: 2.4
+  minWidth: 0
+  scaleWithResolution: 0
+  referenceResolution: 0
+  customResolution: 0
+  materialType: 0
+  customMaterial: {fileID: 0}
+--- !u!114 &5192847192847192847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2cb9e9790a941d3b51ae2615e6e1bd, type: 3}
+  m_Name: HunterAlertOutline
+  m_EditorClassIdentifier: LineworkLite::LineworkLite.FreeOutline.Outline
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 8
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 0
+  maskingStrategy: 0
+  color: {r: 1, g: 0.12, b: 0.12, a: 1}
+  enableOcclusion: 0
+  occludedColor: {r: 1, g: 0.12, b: 0.12, a: 1}
+  blendMode: 0
+  extrusionMethod: 6
+  scaling: 0
+  width: 2.8
+  minWidth: 0
+  scaleWithResolution: 0
+  referenceResolution: 0
+  customResolution: 0
+  materialType: 0
+  customMaterial: {fileID: 0}
+--- !u!114 &7391827401928374651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2cb9e9790a941d3b51ae2615e6e1bd, type: 3}
+  m_Name: HunterAllyOutline
+  m_EditorClassIdentifier: LineworkLite::LineworkLite.FreeOutline.Outline
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 16
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 0
+  maskingStrategy: 0
+  color: {r: 1, g: 0.42, b: 0.05, a: 1}
+  enableOcclusion: 0
+  occludedColor: {r: 1, g: 0.42, b: 0.05, a: 1}
+  blendMode: 0
+  extrusionMethod: 6
+  scaling: 0
+  width: 2.6
+  minWidth: 0
+  scaleWithResolution: 0
+  referenceResolution: 0
+  customResolution: 0
+  materialType: 0
+  customMaterial: {fileID: 0}
+--- !u!114 &8515071944546887470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2cb9e9790a941d3b51ae2615e6e1bd, type: 3}
+  m_Name: TaskOutline
+  m_EditorClassIdentifier: LineworkLite::LineworkLite.FreeOutline.Outline
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 2
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 0
+  occlusion: 2
+  maskingStrategy: 0
+  color: {r: 0.72, g: 0.72, b: 0.75, a: 0.95}
+  enableOcclusion: 0
+  occludedColor: {r: 0.72, g: 0.72, b: 0.75, a: 0.95}
+  blendMode: 0
+  extrusionMethod: 6
+  scaling: 0
+  width: 2
+  minWidth: 0
+  scaleWithResolution: 0
+  referenceResolution: 0
+  customResolution: 0
+  materialType: 0
+  customMaterial: {fileID: 0}
+--- !u!114 &9182736450192837465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca2cb9e9790a941d3b51ae2615e6e1bd, type: 3}
+  m_Name: CityBoundaryOutline
+  m_EditorClassIdentifier: LineworkLite::LineworkLite.FreeOutline.Outline
+  material: {fileID: 0}
+  isActive: 1
+  RenderingLayer:
+    serializedVersion: 0
+    m_Bits: 32
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  renderQueue: 2
+  occlusion: 2
+  maskingStrategy: 0
+  color: {r: 0.72, g: 0.72, b: 0.78, a: 0.95}
+  enableOcclusion: 0
+  occludedColor: {r: 0.72, g: 0.72, b: 0.78, a: 0.95}
+  blendMode: 0
+  extrusionMethod: 6
+  scaling: 0
+  width: 2.4
+  minWidth: 0
+  scaleWithResolution: 0
+  referenceResolution: 0
+  customResolution: 0
+  materialType: 0
+  customMaterial: {fileID: 0}

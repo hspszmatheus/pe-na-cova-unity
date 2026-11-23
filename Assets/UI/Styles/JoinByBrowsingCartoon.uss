@@ -1,0 +1,1068 @@
+/* ============================================================================
+   Casual Cartoon GUI Theme for JoinByBrowsing Lobby HUD
+   Mirrors FCCartoonGUI_UIAnimation palette/bevels while keeping all Blocks
+   UI bindings and online scripts 100% untouched.
+   ============================================================================ */
+
+.lobby-hud-wrapper {
+    flex-grow: 1;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(14, 22, 36, 0.20);
+    justify-content: center;
+    align-items: center;
+}
+
+.lobby-main-container {
+    flex-grow: 1;
+    width: 100%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 32px;
+}
+
+.lobby-left-column {
+    flex-direction: column;
+    width: 560px;
+    max-width: 580px;
+}
+
+.lobby-right-column {
+    flex-direction: column;
+    width: 450px;
+    max-width: 470px;
+    margin-left: 24px;
+}
+
+.lobby-right-column--solo {
+    margin-left: 0;
+    width: 530px;
+    max-width: 560px;
+}
+
+/* ---- Cartoon Connecting / Loading Room Modal ---- */
+.lobby-loading-card {
+    width: 390px;
+    max-width: 420px;
+    padding: 26px 26px 22px 26px;
+}
+
+.lobby-loading-body {
+    align-items: center;
+    justify-content: center;
+    padding: 4px 14px 8px 14px;
+}
+
+.lobby-loading-spinner-row {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    margin-bottom: 12px;
+}
+
+.lobby-loading-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+    margin: 0 7px;
+    background-color: rgb(255, 166, 38);
+    border-width: 2px;
+    border-color: rgb(118, 60, 14);
+}
+
+.lobby-loading-title {
+    font-size: 21px;
+    color: rgb(74, 48, 28);
+    -unity-font-style: bold;
+    letter-spacing: 0.5px;
+    -unity-text-align: middle-center;
+    margin-bottom: 4px;
+}
+
+.lobby-loading-subtitle {
+    font-size: 13px;
+    color: rgb(124, 96, 68);
+    -unity-font-style: normal;
+    -unity-text-align: middle-center;
+}
+
+/* ---- Cartoon Modal Panels (cream card with thick warm brown cartoon border) ---- */
+.lobby-hud-wrapper .blocks-modal {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_panel_cream.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 30;
+    -unity-slice-right: 30;
+    -unity-slice-top: 30;
+    -unity-slice-bottom: 30;
+    border-width: 0;
+    border-radius: 0;
+    padding: 20px 26px 24px 26px;
+    align-items: stretch;
+}
+
+.lobby-name-modal {
+    margin-bottom: 18px;
+}
+
+/* ---- Ribbon Modal Headers ---- */
+.lobby-hud-wrapper .blocks-modal > .blocks-header {
+    background-image: url("../Sprites/Cartoon/cartoon_ribbon_blue.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 26;
+    -unity-slice-right: 26;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    color: rgb(255, 255, 255);
+    font-size: 20px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+    -unity-text-align: middle-center;
+    padding: 10px 20px 13px 20px;
+    margin: -6px 12px 16px 12px;
+    width: auto;
+    text-shadow: 0 2px 0 rgba(22, 72, 138, 0.95);
+    -unity-text-outline-width: 0;
+}
+
+.lobby-hud-wrapper .cartoon-header-green > .blocks-header {
+    background-image: url("../Sprites/Cartoon/cartoon_ribbon_green.png");
+    text-shadow: 0 2px 0 rgba(36, 92, 8, 0.95);
+}
+
+/* CurrentSession top row session title + player count */
+.lobby-hud-wrapper .blocks-modal--left-aligned-text .blocks-header {
+    color: rgb(74, 48, 28);
+    -unity-font-style: bold;
+    letter-spacing: 0.5px;
+    font-size: 20px;
+}
+
+.lobby-hud-wrapper .blocks-modal--left-aligned-text .blocks-header--sm {
+    font-size: 16px;
+    color: rgb(96, 66, 42);
+}
+
+.lobby-hud-wrapper .blocks-label {
+    color: rgb(72, 48, 30);
+    -unity-font-style: bold;
+    font-size: 15px;
+    letter-spacing: 0.4px;
+}
+
+.lobby-hud-wrapper .unity-collection-view__item--selected .blocks-label,
+.lobby-hud-wrapper .unity-collection-view__item--selected:hover .blocks-label,
+.lobby-hud-wrapper .unity-collection-view__item--selected:focus .blocks-label,
+.lobby-hud-wrapper .unity-collection-view__item--selected:active .blocks-label,
+.lobby-hud-wrapper .unity-collection-view__item--selected .unity-label,
+.lobby-hud-wrapper .unity-collection-view__item--selected:hover .unity-label,
+.lobby-hud-wrapper .unity-collection-view__item--selected:focus .unity-label,
+.lobby-hud-wrapper .unity-collection-view__item--selected:active .unity-label {
+    color: rgb(16, 38, 72);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected .blocks-label,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:hover .blocks-label,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:focus .blocks-label,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:active .blocks-label,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected .unity-label,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:hover .unity-label,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:focus .unity-label,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:active .unity-label {
+    color: rgb(72, 48, 30);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+}
+
+/* ---- Cartoon Recessed Inputs ---- */
+.lobby-hud-wrapper .blocks-textfield {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_input_bg.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 20;
+    -unity-slice-right: 20;
+    -unity-slice-top: 20;
+    -unity-slice-bottom: 20;
+    border-width: 0;
+    border-radius: 0;
+    min-height: 48px;
+    height: 48px;
+    letter-spacing: 0.5px;
+    justify-content: center;
+}
+
+.lobby-hud-wrapper .blocks-textfield:focus {
+    background-image: url("../Sprites/Cartoon/cartoon_input_focus.png");
+}
+
+.lobby-hud-wrapper .blocks-textfield > .unity-base-field__input,
+.lobby-hud-wrapper .blocks-textfield .unity-text-element {
+    background-color: transparent;
+    border-width: 0;
+    color: rgb(52, 36, 24);
+    -unity-font-style: bold;
+    font-size: 16px;
+    letter-spacing: 0.4px;
+    padding: 4px 14px;
+    margin: 0;
+    --unity-cursor-color: rgb(230, 118, 18);
+}
+
+.lobby-hud-wrapper .blocks-textfield > .unity-base-text-field__input--placeholder,
+.lobby-hud-wrapper .blocks-textfield .unity-base-text-field__input--placeholder {
+    color: rgb(148, 126, 102);
+    -unity-font-style: normal;
+}
+
+/* Header session code chip + Copy button */
+.lobby-hud-wrapper .blocks-copy-session--header {
+    align-items: center;
+}
+
+.lobby-hud-wrapper .blocks-copy-session--header > .blocks-textfield {
+    background-image: none;
+    background-color: rgb(235, 221, 196);
+    border-width: 2px;
+    border-color: rgb(170, 144, 114);
+    border-radius: 10px;
+    min-height: 30px;
+    height: 30px;
+    min-width: 82px;
+    padding: 2px 10px;
+    margin: 0 6px 0 0;
+}
+
+.lobby-hud-wrapper .blocks-copy-session--header > .blocks-textfield > .unity-base-field__input,
+.lobby-hud-wrapper .blocks-copy-session--header > .blocks-textfield .unity-text-element {
+    color: rgb(62, 40, 24);
+    font-size: 14px;
+    padding: 0;
+    -unity-text-align: middle-center;
+}
+
+.lobby-hud-wrapper .blocks-copy-session--header > .blocks-button {
+    background-image: url("../Sprites/Cartoon/cartoon_icon_copy.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-slice-left: 0;
+    -unity-slice-right: 0;
+    -unity-slice-top: 0;
+    -unity-slice-bottom: 0;
+    background-color: rgb(244, 232, 206);
+    border-width: 2px;
+    border-color: rgb(166, 134, 98);
+    border-radius: 8px;
+    min-width: 30px;
+    max-width: 30px;
+    width: 30px;
+    min-height: 30px;
+    max-height: 30px;
+    height: 30px;
+    padding: 5px;
+    margin: 0;
+    font-size: 0;
+    color: rgba(0, 0, 0, 0);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    -unity-text-outline-width: 0;
+    overflow: hidden;
+}
+
+.lobby-hud-wrapper .blocks-copy-session--header > .blocks-button:hover:enabled {
+    background-image: url("../Sprites/Cartoon/cartoon_icon_copy.png");
+    background-color: rgb(255, 232, 184);
+    scale: 1.08;
+}
+
+.lobby-hud-wrapper .blocks-copy-session--header > .blocks-button:active:enabled {
+    background-image: url("../Sprites/Cartoon/cartoon_icon_copy.png");
+    scale: 0.95;
+}
+
+/* ---- Glossy Beveled Cartoon Buttons ---- */
+.lobby-hud-wrapper .blocks-button {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_btn_blue.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 28;
+    -unity-slice-right: 28;
+    -unity-slice-top: 28;
+    -unity-slice-bottom: 28;
+    border-width: 0;
+    border-radius: 0;
+    min-height: 48px;
+    height: 48px;
+    min-width: 132px;
+    padding: 0 20px 3px 20px;
+    margin-top: 6px;
+    color: rgb(255, 255, 255);
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 2px 0 rgba(20, 60, 122, 0.95);
+    transform-origin: center;
+    transition-property: scale, rotate, translate;
+    transition-duration: 0.16s, 0.16s, 0.1s;
+    transition-timing-function: ease-out-back, ease-out-back, ease-out;
+}
+
+.lobby-hud-wrapper .blocks-button:hover:enabled,
+.lobby-hud-wrapper .blocks-button:focus:enabled {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_btn_blue_hover.png");
+    color: rgb(255, 255, 255);
+    scale: 1.06;
+    rotate: -1.6deg;
+    translate: 0 -2px;
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--orange:hover:enabled,
+.lobby-hud-wrapper .blocks-button.cartoon-btn--orange:focus:enabled,
+.lobby-hud-wrapper .blocks-button.cartoon-btn--red:hover:enabled,
+.lobby-hud-wrapper .blocks-button.cartoon-btn--red:focus:enabled {
+    rotate: 1.6deg;
+}
+
+.lobby-hud-wrapper .blocks-button:active:enabled {
+    background-color: transparent;
+    scale: 0.93;
+    rotate: 0deg;
+    translate: 0 3px;
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--green {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_green.png");
+    text-shadow: 0 2px 0 rgba(38, 92, 6, 0.95);
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--green:hover:enabled,
+.lobby-hud-wrapper .blocks-button.cartoon-btn--green:focus:enabled {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_green_hover.png");
+    color: rgb(255, 255, 255);
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--orange {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_orange.png");
+    text-shadow: 0 2px 0 rgba(145, 62, 12, 0.95);
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--orange:hover:enabled,
+.lobby-hud-wrapper .blocks-button.cartoon-btn--orange:focus:enabled {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_orange_hover.png");
+    color: rgb(255, 255, 255);
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--orange:active:enabled {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_orange_pressed.png");
+    color: rgb(255, 255, 255);
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--red {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_red.png");
+    text-shadow: 0 2px 0 rgba(128, 24, 26, 0.95);
+}
+
+.lobby-hud-wrapper .blocks-button.cartoon-btn--red:hover:enabled,
+.lobby-hud-wrapper .blocks-button.cartoon-btn--red:focus:enabled {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_red_hover.png");
+    color: rgb(255, 255, 255);
+}
+
+.lobby-hud-wrapper .blocks-button:disabled,
+.lobby-hud-wrapper .blocks-button.unity-disabled {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_btn_disabled.png");
+    color: rgb(96, 94, 102);
+    text-shadow: 0 0 0 rgba(0, 0, 0, 0);
+    -unity-text-outline-width: 0;
+    scale: 1;
+    rotate: 0deg;
+    translate: 0 0;
+}
+
+/* Remove extra top margin when button sits inline next to text field */
+.lobby-hud-wrapper .blocks-container--horizontal > .blocks-button,
+.lobby-name-row > .blocks-button {
+    margin-top: 0;
+}
+
+.lobby-name-row {
+    flex-direction: row;
+    align-items: center;
+}
+
+.lobby-name-input {
+    flex-grow: 1;
+    margin-right: 12px;
+}
+
+/* ---- Session List & Player List ---- */
+.lobby-hud-wrapper .blocks-scroll-view {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_list_bg.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 22;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    padding: 14px 16px;
+    margin-top: 12px;
+    min-height: 230px;
+    max-height: 280px;
+}
+
+.lobby-hud-wrapper .unity-list-view__footer {
+    margin-top: 10px;
+    padding-top: 6px;
+}
+
+.lobby-right-column .blocks-scroll-view {
+    min-height: 115px;
+    max-height: 185px;
+    margin-top: 4px;
+}
+
+.lobby-hud-wrapper .blocks-scroll-view__element {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_list_item.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 18;
+    -unity-slice-right: 18;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+    border-width: 0;
+    height: 46px;
+    margin-bottom: 6px;
+    padding: 0 14px;
+    transition-property: scale;
+    transition-duration: 0.14s;
+    transition-timing-function: ease-out-back;
+}
+
+.lobby-hud-wrapper .unity-collection-view__item {
+    background-color: transparent;
+    border-radius: 12px;
+    margin-bottom: 4px;
+}
+
+.lobby-hud-wrapper .unity-collection-view__item:hover {
+    background-color: transparent;
+}
+
+.lobby-hud-wrapper .blocks-scroll-view__element.unity-collection-view__item:hover,
+.lobby-hud-wrapper .unity-collection-view__item:hover .blocks-scroll-view__element {
+    scale: 1.018;
+    -unity-background-image-tint-color: rgb(236, 246, 255);
+}
+
+.lobby-hud-wrapper .unity-collection-view__item:focus,
+.lobby-hud-wrapper .unity-collection-view__item--selected,
+.lobby-hud-wrapper .unity-collection-view__item--selected:hover,
+.lobby-hud-wrapper .unity-collection-view__item--selected:focus,
+.lobby-hud-wrapper .unity-collection-view__item--selected:active {
+    background-color: transparent;
+}
+
+.lobby-hud-wrapper .blocks-scroll-view__element.unity-collection-view__item--selected,
+.lobby-hud-wrapper .blocks-scroll-view__element.unity-collection-view__item--selected:hover,
+.lobby-hud-wrapper .blocks-scroll-view__element.unity-collection-view__item--selected:focus,
+.lobby-hud-wrapper .blocks-scroll-view__element.unity-collection-view__item--selected:active,
+.lobby-hud-wrapper .unity-collection-view__item--selected .blocks-scroll-view__element,
+.lobby-hud-wrapper .unity-collection-view__item--selected:hover .blocks-scroll-view__element,
+.lobby-hud-wrapper .unity-collection-view__item--selected:focus .blocks-scroll-view__element,
+.lobby-hud-wrapper .unity-collection-view__item--selected:active .blocks-scroll-view__element {
+    background-image: url("../Sprites/Cartoon/cartoon_list_item_selected.png");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    scale: 1.012;
+}
+
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item:hover,
+.lobby-hud-wrapper .blocks-list-view--no-hover .blocks-scroll-view__element.unity-collection-view__item:hover,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item:hover .blocks-scroll-view__element,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:hover,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:focus,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:active,
+.lobby-hud-wrapper .blocks-list-view--no-hover .blocks-scroll-view__element.unity-collection-view__item--selected,
+.lobby-hud-wrapper .blocks-list-view--no-hover .blocks-scroll-view__element.unity-collection-view__item--selected:hover,
+.lobby-hud-wrapper .blocks-list-view--no-hover .blocks-scroll-view__element.unity-collection-view__item--selected:focus,
+.lobby-hud-wrapper .blocks-list-view--no-hover .blocks-scroll-view__element.unity-collection-view__item--selected:active,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected .blocks-scroll-view__element,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:hover .blocks-scroll-view__element,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:focus .blocks-scroll-view__element,
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item--selected:active .blocks-scroll-view__element {
+    background-image: url("../Sprites/Cartoon/cartoon_list_item.png");
+    -unity-background-image-tint-color: rgb(255, 255, 255);
+    scale: 1;
+}
+
+.lobby-hud-wrapper .blocks-list-view--no-hover .unity-collection-view__item {
+    background-image: url("../Sprites/Cartoon/cartoon_list_item.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 18;
+    -unity-slice-right: 18;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+    padding: 8px 14px;
+    margin-bottom: 6px;
+}
+
+/* Custom Scrollbar inside lists */
+.lobby-hud-wrapper .blocks-scroll-view .unity-base-slider__dragger {
+    width: 8px;
+    border-radius: 4px;
+    background-color: rgb(168, 138, 104);
+}
+
+/* ---- NPC Settings Subcard & Cartoon Slider ---- */
+.cartoon-npc-settings-box {
+    background-image: url("../Sprites/Cartoon/cartoon_list_bg.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 22;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    padding: 12px 14px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
+.cartoon-npc-title {
+    font-size: 13px;
+    color: rgb(82, 54, 34);
+    -unity-font-style: bold;
+    letter-spacing: 0.6px;
+}
+
+.cartoon-npc-value {
+    font-size: 17px;
+    color: rgb(225, 108, 12);
+    -unity-font-style: bold;
+}
+
+.cartoon-npc-hint {
+    font-size: 11px;
+    color: rgb(138, 110, 82);
+    -unity-font-style: italic;
+}
+
+.cartoon-npc-slider {
+    margin: 6px 0;
+}
+
+.cartoon-npc-slider .unity-base-slider__tracker {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_slider_track.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 10;
+    -unity-slice-bottom: 10;
+    border-width: 0;
+    height: 14px;
+    margin-top: -7px;
+}
+
+.cartoon-npc-slider .unity-base-slider__dragger {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_slider_knob.png");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+}
+
+.cartoon-npc-slider .unity-base-slider__dragger-border {
+    display: none;
+}
+
+/* Status Footer Label */
+.lobby-hud-wrapper .blocks-container--right {
+    margin-top: 8px;
+}
+
+/* Corner Action: Quit Game Button */
+.lobby-corner-actions {
+    position: absolute;
+    bottom: 24px;
+    right: 28px;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+}
+
+.lobby-hud-wrapper .menu-quit-button {
+    min-width: 176px;
+    height: 52px;
+    font-size: 16px;
+    letter-spacing: 0.8px;
+    padding: 0 20px 4px 20px;
+    margin: 0;
+}
+
+/* ---- Corner Action: Unified Volume Box (Mute Icon + Slider + Percent) ---- */
+.menu-volume-box {
+    background-image: url("../Sprites/Cartoon/cartoon_list_bg.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 20;
+    -unity-slice-right: 20;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+    height: 52px;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 16px;
+    margin: 0 14px 0 0;
+    min-width: 270px;
+}
+
+.menu-mute-icon-btn {
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    margin: 0 10px 0 0;
+    background-color: transparent;
+    border-left-width: 0;
+    border-right-width: 0;
+    border-top-width: 0;
+    border-bottom-width: 0;
+    align-items: center;
+    justify-content: center;
+    transition-property: scale;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out-back;
+}
+
+.menu-mute-icon-btn:hover {
+    scale: 1.18 1.18;
+}
+
+.menu-mute-icon-btn:active {
+    scale: 0.90 0.90;
+}
+
+.menu-mute-icon {
+    width: 26px;
+    height: 26px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_sound_on.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(82, 54, 34);
+}
+
+.menu-mute-icon--muted {
+    background-image: url("../Sprites/Cartoon/cartoon_icon_sound_off.png");
+    -unity-background-image-tint-color: rgb(214, 60, 42);
+}
+
+.menu-volume-slider {
+    flex-grow: 1;
+    margin: 0 8px 0 0;
+    height: 30px;
+}
+
+.menu-volume-slider .unity-base-slider__tracker {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_slider_track.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 10;
+    -unity-slice-bottom: 10;
+    border-width: 0;
+    height: 14px;
+    margin-top: -7px;
+}
+
+.menu-volume-slider .unity-base-slider__dragger {
+    background-color: transparent;
+    background-image: url("../Sprites/Cartoon/cartoon_slider_knob.png");
+    -unity-background-scale-mode: scale-to-fit;
+    border-width: 0;
+    width: 24px;
+    height: 24px;
+    margin-top: -12px;
+}
+
+.menu-volume-slider .unity-base-slider__dragger-border {
+    display: none;
+}
+
+.menu-volume-percent {
+    min-width: 44px;
+    font-size: 14px;
+    -unity-font-style: bold;
+    color: rgb(225, 108, 12);
+    -unity-text-align: middle-right;
+}
+
+/* ---- Quit Game Confirmation Modal ---- */
+.quit-confirm-modal-backdrop {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(10, 6, 4, 0.76);
+    align-items: center;
+    justify-content: center;
+}
+
+.quit-confirm-card {
+    width: 480px;
+    max-width: 90%;
+    align-items: center;
+    justify-content: center;
+    padding: 26px 32px 26px 32px;
+    overflow: visible;
+}
+
+.quit-confirm-header-ribbon {
+    width: 250px;
+    height: 46px;
+    background-image: url("../Sprites/Cartoon/cartoon_ribbon_red.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 26;
+    -unity-slice-right: 26;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    align-items: center;
+    justify-content: center;
+    margin-top: -42px;
+    margin-bottom: 16px;
+}
+
+.quit-confirm-header-title {
+    color: rgb(255, 255, 255);
+    font-size: 18px;
+    -unity-font-style: bold;
+    letter-spacing: 1px;
+}
+
+.quit-confirm-body {
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+}
+
+.quit-confirm-message {
+    color: rgb(62, 38, 22);
+    font-size: 20px;
+    -unity-font-style: bold;
+    -unity-text-align: middle-center;
+    margin-bottom: 8px;
+    white-space: normal;
+}
+
+.quit-confirm-submessage {
+    color: rgb(114, 82, 58);
+    font-size: 14px;
+    -unity-text-align: middle-center;
+    margin-bottom: 24px;
+    white-space: normal;
+}
+
+.quit-confirm-actions {
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quit-confirm-btn {
+    min-width: 195px;
+    height: 48px;
+    font-size: 15px;
+    -unity-font-style: bold;
+    letter-spacing: 0.6px;
+    margin: 0 4px;
+}
+
+/* ============================================================================
+   SALA DE ESPERA / CURRENT SESSION (TEMA CARTOON CONVIDATIVO)
+   ============================================================================ */
+
+.room-card-modal {
+    padding: 24px 30px 22px 30px;
+    align-items: stretch;
+}
+
+/* Ribbon Cabeçalho da Sala */
+.room-header-ribbon {
+    align-self: center;
+    background-image: url("../Sprites/Cartoon/cartoon_ribbon_blue.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 26;
+    -unity-slice-right: 26;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    min-width: 260px;
+    padding: 8px 36px 12px 36px;
+    margin-top: -46px;
+    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
+}
+
+.room-header-title {
+    color: rgb(255, 255, 255);
+    font-size: 21px;
+    -unity-font-style: bold;
+    letter-spacing: 1.2px;
+    -unity-text-align: middle-center;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.45);
+}
+
+/* Barra de Informações da Sala (Nome + Contador) */
+.room-info-bar {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-image: url("../Sprites/Cartoon/cartoon_list_bg.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 22;
+    -unity-slice-right: 22;
+    -unity-slice-top: 22;
+    -unity-slice-bottom: 22;
+    padding: 10px 16px;
+    margin-bottom: 10px;
+}
+
+.room-name-box {
+    flex-direction: row;
+    align-items: center;
+    flex-shrink: 1;
+}
+
+.room-name-prefix {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(138, 102, 72);
+    letter-spacing: 0.6px;
+    margin-right: 6px;
+}
+
+.room-name-value {
+    font-size: 16px;
+    -unity-font-style: bold;
+    color: rgb(72, 48, 30);
+    letter-spacing: 0.5px;
+}
+
+.room-player-count-pill {
+    flex-direction: row;
+    align-items: center;
+    background-image: url("../Sprites/Cartoon/cartoon_btn_blue.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 14;
+    -unity-slice-bottom: 14;
+    padding: 4px 14px 6px 12px;
+}
+
+.room-player-count-icon {
+    width: 16px;
+    height: 16px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_survivors.png");
+    -unity-background-scale-mode: scale-to-fit;
+    margin-right: 6px;
+}
+
+.room-player-count-text {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: #FFFFFF;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+/* Card Convidativo de Boas-Vindas */
+.room-welcome-box {
+    padding: 8px 14px 9px 14px;
+    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background-color: rgba(235, 222, 204, 0.65);
+    border-width: 1px;
+    border-color: rgba(160, 126, 92, 0.40);
+}
+
+.room-welcome-title {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(82, 54, 34);
+    -unity-text-align: middle-center;
+    letter-spacing: 0.4px;
+}
+
+.room-welcome-subtitle {
+    font-size: 11px;
+    color: rgb(132, 102, 76);
+    -unity-text-align: middle-center;
+    margin-top: 2px;
+}
+
+/* Seção de Jogadores */
+.room-players-section {
+    margin-bottom: 12px;
+}
+
+.room-players-header-row {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-left: 4px;
+}
+
+.room-players-icon {
+    width: 18px;
+    height: 18px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_survivors.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(72, 48, 30);
+    margin-right: 8px;
+}
+
+.room-players-section-title {
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(72, 48, 30);
+    letter-spacing: 0.8px;
+}
+
+.room-player-list-view {
+    min-height: 130px;
+    max-height: 200px;
+    background-color: transparent;
+    border-width: 0;
+}
+
+/* Card Individual de Cada Jogador na Lista */
+.cartoon-player-card {
+    flex-direction: row;
+    align-items: center;
+    background-image: url("../Sprites/Cartoon/cartoon_list_item.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 18;
+    -unity-slice-right: 18;
+    -unity-slice-top: 18;
+    -unity-slice-bottom: 18;
+    padding: 6px 14px;
+    margin-bottom: 6px;
+    height: 48px;
+}
+
+.cartoon-player-avatar-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    background-color: #FAF4EB;
+    border-width: 2px;
+    border-color: #7A4E2D;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+
+.cartoon-player-avatar-icon {
+    width: 18px;
+    height: 18px;
+    background-image: url("../Sprites/Cartoon/cartoon_icon_survivors.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: #5A351C;
+}
+
+.cartoon-player-info-box {
+    flex-grow: 1;
+    justify-content: center;
+}
+
+.cartoon-player-name-text {
+    font-size: 15px;
+    -unity-font-style: bold;
+    color: rgb(72, 48, 30);
+    letter-spacing: 0.5px;
+}
+
+.cartoon-player-role-badge {
+    padding: 4px 10px 5px 10px;
+    border-radius: 8px;
+    font-size: 11px;
+    -unity-font-style: bold;
+    letter-spacing: 0.8px;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.cartoon-player-role-badge--host {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_orange.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 14;
+    -unity-slice-bottom: 14;
+    color: #FFFFFF;
+}
+
+.cartoon-player-role-badge--survivor {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_blue.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 14;
+    -unity-slice-bottom: 14;
+    color: #FFFFFF;
+}
+
+.cartoon-player-empty-box {
+    padding: 24px;
+    align-items: center;
+    justify-content: center;
+}
+
+.cartoon-player-empty-label {
+    font-size: 13px;
+    color: rgb(138, 110, 84);
+    -unity-font-style: italic;
+    -unity-text-align: middle-center;
+}
+
+/* Botões da Sala */
+.room-actions-container {
+    margin-top: 6px;
+    margin-bottom: 4px;
+}
+
+.room-action-btn {
+    height: 48px;
+    margin-bottom: 8px;
+    font-size: 16px;
+    -unity-font-style: bold;
+    letter-spacing: 0.8px;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.35);
+    transition-property: scale;
+    transition-duration: 0.12s;
+    transition-timing-function: ease-out-back;
+}
+
+.room-action-btn:hover {
+    scale: 1.025 1.025;
+}
+
+.room-action-btn:active {
+    scale: 0.97 0.97;
+}
+
+.room-status-footer {
+    align-items: center;
+    justify-content: center;
+    margin-top: 4px;
+}
+
+.room-status-label {
+    font-size: 12px;
+    -unity-font-style: italic;
+    color: rgb(132, 104, 78);
+}
