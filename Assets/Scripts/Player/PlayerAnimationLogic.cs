@@ -410,8 +410,9 @@ public class PlayerAnimationLogic : MonoBehaviour
     /// <summary>
     /// Inicia ou encerra a animação de canalização da magia de revelação da Morte (Standing 2H Magic Area Attack 02),
     /// sincronizando localmente no Animator e na rede via NetworkAnimator.
+    /// Se isCancelled for true, faz transição imediata para Idle. Se false (conclusão aos 1.5s), permite o término fluido do golpe e transição suave.
     /// </summary>
-    public void SetHunterRevealCastAnimation(bool isCasting)
+    public void SetHunterRevealCastAnimation(bool isCasting, bool isCancelled = false)
     {
         EnsureActiveAnimator();
         if (characterAnimator != null && characterAnimator.gameObject.activeInHierarchy)
@@ -425,10 +426,13 @@ public class PlayerAnimationLogic : MonoBehaviour
             else
             {
                 characterAnimator.ResetTrigger("RevealCast");
-                var state = characterAnimator.GetCurrentAnimatorStateInfo(0);
-                if (state.IsName("Hunter Reveal Cast"))
+                if (isCancelled)
                 {
-                    characterAnimator.CrossFadeInFixedTime("Idle", 0.20f);
+                    var state = characterAnimator.GetCurrentAnimatorStateInfo(0);
+                    if (state.IsName("Hunter Reveal Cast"))
+                    {
+                        characterAnimator.CrossFadeInFixedTime("Idle", 0.15f);
+                    }
                 }
             }
         }

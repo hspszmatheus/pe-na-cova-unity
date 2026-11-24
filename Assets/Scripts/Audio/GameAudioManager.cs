@@ -543,14 +543,14 @@ public class GameAudioManager : MonoBehaviour
 
         hunterRevealLoopSource.Stop();
         hunterRevealLoopSource.clip = hunterRevealChargeClip;
-        hunterRevealLoopSource.volume = 0.85f;
-        hunterRevealLoopSource.pitch = 0.90f;
-        hunterRevealLoopSource.loop = false; // NUNCA deve ficar em loop infinito! O áudio tem 4.0s e a conjuração 2.5s.
+        hunterRevealLoopSource.volume = 0.70f;
+        hunterRevealLoopSource.pitch = 1.0f;
+        hunterRevealLoopSource.loop = false; // Áudio de canalização para os 1.5s de conjuração rápida
         hunterRevealLoopSource.Play();
     }
 
     /// <summary>
-    /// Modula a frequência e volume do feitiço conforme a barra progride.
+    /// Modula a frequência e volume do feitiço conforme a barra progride (0 a 1 em 1.5s).
     /// </summary>
     public void UpdateHunterRevealChargePitch(float progress, Vector3? position = null)
     {
@@ -563,8 +563,11 @@ public class GameAudioManager : MonoBehaviour
 
             if (hunterRevealLoopSource.isPlaying)
             {
-                hunterRevealLoopSource.pitch = Mathf.Lerp(0.90f, 1.25f, Mathf.Clamp01(progress));
-                hunterRevealLoopSource.volume = Mathf.Lerp(0.70f, 0.95f, Mathf.Clamp01(progress));
+                float p = Mathf.Clamp01(progress);
+                // Pitch acelera de 1.0f até 1.45f criando a tensão crescente da conjuração rápida
+                hunterRevealLoopSource.pitch = Mathf.Lerp(1.0f, 1.45f, p);
+                // Volume cresce até 1.0f no clímax exato aos 1.5 segundos
+                hunterRevealLoopSource.volume = Mathf.Lerp(0.70f, 1.0f, p);
             }
         }
     }
@@ -582,7 +585,7 @@ public class GameAudioManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Emite a explosão e detonação da onda de choque mágica aos 2.5 segundos exatos.
+    /// Emite a explosão e detonação da onda de choque mágica aos 1.5 segundos exatos, no clímax do golpe da Morte.
     /// </summary>
     public void PlayHunterRevealRelease(Vector3 position)
     {
@@ -591,7 +594,7 @@ public class GameAudioManager : MonoBehaviour
 
         if (hunterRevealReleaseClip != null)
         {
-            PlaySpatialSound(hunterRevealReleaseClip, position, volume: 1.0f, minDistance: 5f, maxDistance: 45f, pitch: 0.95f);
+            PlaySpatialSound(hunterRevealReleaseClip, position, volume: 1.0f, minDistance: 5f, maxDistance: 45f, pitch: 1.0f);
         }
     }
 

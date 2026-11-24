@@ -2221,13 +2221,13 @@ public class PlayerController : NetworkBehaviour
         isCastingReveal = false;
         hunterRevealHoldTimer = 0f;
         GameAudioManager.Instance?.StopHunterRevealCharge();
-        animationLogic?.SetHunterRevealCastAnimation(false);
+        animationLogic?.SetHunterRevealCastAnimation(false, isCancelled: true);
         GameHUDController.Instance?.SetHunterAbilityCastingProgress(false, 0f, hunterRevealCastDuration, "");
         HunterRevealAreaVisual.Hide();
 
         if (IsSpawned)
         {
-            TriggerHunterRevealCastServerRpc(false);
+            TriggerHunterRevealCastServerRpc(false, isCancelled: true);
         }
     }
 
@@ -2236,7 +2236,7 @@ public class PlayerController : NetworkBehaviour
         isCastingReveal = false;
         hunterRevealHoldTimer = 0f;
         lastHunterRevealTime = Time.time;
-        animationLogic?.SetHunterRevealCastAnimation(false);
+        animationLogic?.SetHunterRevealCastAnimation(false, isCancelled: false);
         GameHUDController.Instance?.SetHunterAbilityCastingProgress(false, 0f, hunterRevealCastDuration, "");
         HunterRevealAreaVisual.TriggerPulseAndHide(transform.position, hunterRevealRadius);
 
@@ -2245,23 +2245,23 @@ public class PlayerController : NetworkBehaviour
 
         if (IsSpawned)
         {
-            TriggerHunterRevealCastServerRpc(false);
+            TriggerHunterRevealCastServerRpc(false, isCancelled: false);
             RequestHunterRevealServerRpc(transform.position, hunterRevealRadius, hunterRevealDuration);
         }
     }
 
     [ServerRpc]
-    private void TriggerHunterRevealCastServerRpc(bool isCasting)
+    private void TriggerHunterRevealCastServerRpc(bool isCasting, bool isCancelled = false)
     {
-        TriggerHunterRevealCastClientRpc(isCasting);
+        TriggerHunterRevealCastClientRpc(isCasting, isCancelled);
     }
 
     [ClientRpc]
-    private void TriggerHunterRevealCastClientRpc(bool isCasting)
+    private void TriggerHunterRevealCastClientRpc(bool isCasting, bool isCancelled = false)
     {
         if (IsOwner) return; // O dono local já gerencia diretamente
 
-        animationLogic?.SetHunterRevealCastAnimation(isCasting);
+        animationLogic?.SetHunterRevealCastAnimation(isCasting, isCancelled);
         if (isCasting)
         {
             HunterRevealAreaVisual.Show(transform, hunterRevealRadius);
