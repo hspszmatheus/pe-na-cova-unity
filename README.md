@@ -1,6 +1,6 @@
 # 🎮 Pé na Cova
 
-> Jogo multiplayer assimétrico em terceira pessoa desenvolvido em **Unity** com foco em furtividade, dedução social e conclusão de objetivos em ambiente urbano.
+> Jogo multiplayer assimétrico em terceira pessoa desenvolvido na **Unity** com foco em furtividade, dedução social e conclusão de objetivos em ambiente urbano.
 
 ---
 
@@ -19,7 +19,7 @@
 ## 📌 Nota sobre o Controle de Versão
 
 > [!NOTE]
-> Todo o desenvolvimento ativo e colaborativo do projeto foi realizado utilizando o **sistema de controle de versão nativo da Unity (Unity Version Control / Plastic SCM)**.
+> Todo o desenvolvimento foi realizado utilizando o **sistema de controle de versão nativo da Unity (Unity Version Control / Plastic SCM)**.
 > 
 > O projeto foi exportado e estruturado neste repositório do **GitHub** especialmente para **facilitar o acesso, avaliação e execução do código por parte do professor**, mantendo o repositório leve e otimizado com o `.gitignore` oficial da Unity (excluindo as pastas de cache como `Library/`, `Temp/`, etc., que são recriadas automaticamente pelo editor).
 
@@ -27,7 +27,7 @@
 
 ## 🕹️ Sobre o Jogo
 
-**Pé na Cova** é uma experiência multiplayer assimétrica onde os jogadores são divididos entre **Sobreviventes (Survivors)** e **Caçador (Hunter)** em um mapa urbano vivo e dinâmico.
+**Pé na Cova** é uma experiência multiplayer assimétrica onde os jogadores são divididos entre **Sobreviventes (Survivors)** e **Caçador (Hunter)** em um mapa urbano.
 
 ### 🎯 Dinâmica da Partida
 
@@ -41,7 +41,6 @@
   * Possui habilidades únicas e temáticas, incluindo:
     * Invocação e lançamento de **projéteis de fogo (Fireball)**.
     * Habilidade de **revelação em área** para expor sobreviventes escondidos.
-    * **Presença intimidadora / efeito de medo por proximidade** que alerta e desestabiliza sobreviventes próximos.
 
 ### 🏙️ Principais Funcionalidades e Sistemas
 
