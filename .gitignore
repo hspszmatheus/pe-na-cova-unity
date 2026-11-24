@@ -144,3 +144,15 @@ ignore.conf
 # Local temporary / scratch files
 scratch/
 
+# Video files (avoid GitHub 100MB limit)
+*.mp4
+*.mp4.meta
+*.mov
+*.mov.meta
+*.avi
+*.avi.meta
+/[Aa]ssets/[Vv]ideos/
+/[Aa]ssets/[Vv]ideos.meta
+/[Vv]ideos/
+
+
