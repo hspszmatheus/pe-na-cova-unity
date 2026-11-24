@@ -114,14 +114,19 @@
     -unity-text-align: middle-center;
 }
 
-/* Seção Integrada de Volume e Mute */
+/* Seção Integrada de Volume e Mute (Geral e Música) */
+.pause-audio-group {
+    width: 100%;
+    margin-bottom: 12px;
+}
+
 .pause-audio-section {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 16px;
-    padding: 8px 16px 8px 14px;
+    margin-bottom: 8px;
+    padding: 6px 14px 6px 12px;
     background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_list_bg.png");
     -unity-background-scale-mode: stretch-to-fill;
     -unity-slice-left: 20;
@@ -130,9 +135,19 @@
     -unity-slice-bottom: 18;
 }
 
+.pause-audio-label {
+    min-width: 58px;
+    font-size: 13px;
+    -unity-font-style: bold;
+    color: rgb(82, 54, 34);
+    letter-spacing: 0.6px;
+    -unity-text-align: middle-left;
+    margin-right: 4px;
+}
+
 .btn-mute {
-    width: 38px;
-    height: 38px;
+    width: 34px;
+    height: 34px;
     padding: 0;
     align-items: center;
     justify-content: center;
@@ -141,7 +156,7 @@
     border-right-width: 0;
     border-top-width: 0;
     border-bottom-width: 0;
-    margin-right: 8px;
+    margin-right: 6px;
     transition-property: scale;
     transition-duration: 0.12s;
     transition-timing-function: ease-out-back;
@@ -150,7 +165,7 @@
 .pause-slider-track-wrap {
     flex-grow: 1;
     justify-content: center;
-    margin-right: 12px;
+    margin-right: 10px;
 }
 
 .pause-volume-slider {
@@ -185,8 +200,8 @@
 }
 
 .pause-volume-percent {
-    min-width: 48px;
-    font-size: 15px;
+    min-width: 44px;
+    font-size: 14px;
     -unity-font-style: bold;
     color: rgb(72, 48, 30);
     -unity-text-align: middle-right;
@@ -201,8 +216,8 @@
 }
 
 .mute-icon {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
     background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_sound_on.png");
     -unity-background-scale-mode: scale-to-fit;
     -unity-background-image-tint-color: rgb(82, 54, 34);
@@ -210,6 +225,19 @@
 
 .btn-mute--muted .mute-icon {
     background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_sound_off.png");
+    -unity-background-image-tint-color: rgb(214, 60, 42);
+}
+
+.music-icon {
+    width: 24px;
+    height: 24px;
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_music.png");
+    -unity-background-scale-mode: scale-to-fit;
+    -unity-background-image-tint-color: rgb(82, 54, 34);
+}
+
+.btn-mute--muted .music-icon {
+    background-image: url("project://database/Assets/UI/Sprites/Cartoon/cartoon_icon_music_off.png");
     -unity-background-image-tint-color: rgb(214, 60, 42);
 }
 

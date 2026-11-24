@@ -959,6 +959,7 @@ public class AirplaneCrashCutsceneController : NetworkBehaviour
         }
 
         Debug.Log("[AirplaneCutscene] Cutscene concluída com sucesso! Disparando início da partida e chegada da Morte.");
+        GameAudioManager.Instance?.StartGameplayMusic(1.5f);
         OnCutsceneFinished?.Invoke();
     }
 

@@ -53,6 +53,15 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip menuMusicClip;
     [SerializeField, Range(0f, 1f)] private float menuMusicVolume = 0.42f;
 
+    [Header("Música de Fundo da Partida (Casual Theme 2)")]
+    [Tooltip("Loops musicais do tema Casual Theme 2 que tocam durante a gameplay")]
+    [SerializeField] private AudioClip[] casualTheme2Loops;
+    [SerializeField, Range(0f, 1f)] private float gameplayMusicBaseVolume = 0.40f;
+
+    [Header("Vitória / Fim de Partida")]
+    [Tooltip("Fogos de artifício comemorativos executados para o(s) vencedor(es) da partida")]
+    [SerializeField] private AudioClip victoryFireworksClip;
+
     [Header("Menu & UI SFX (Dustyroom Casual Game Sounds)")]
     [SerializeField] private AudioClip buttonHoverClip;
     [SerializeField] private AudioClip buttonClickClip;
@@ -115,10 +124,14 @@ public class GameAudioManager : MonoBehaviour
 
     // Fontes de Áudio 2D internas
     private AudioSource musicSource;
+    private AudioSource gameplayMusicSource;
     private AudioSource uiSource;
     private AudioSource meteorLoopSource;
 
     private Coroutine musicFadeCoroutine;
+    private Coroutine gameplayMusicCoroutine;
+    private Coroutine gameplayMusicFadeCoroutine;
+    private bool isGameplayMusicActive = false;
     private float lastHoverSoundTime = -1f;
     private float lastSliderSoundTime = -1f;
     private float lastHunterTaskAlertTime = -1f;
@@ -145,6 +158,11 @@ public class GameAudioManager : MonoBehaviour
     {
         StopHunterRevealCharge();
         StopMeteorFallLoop();
+        StopGameplayMusic(0f);
+        if (AirplaneCrashCutsceneController.Instance != null)
+        {
+            AirplaneCrashCutsceneController.Instance.OnCutsceneFinished -= HandleCutsceneFinishedForMusic;
+        }
         if (instance == this)
         {
             SceneManager.sceneLoaded -= OnSceneLoaded;
@@ -168,12 +186,33 @@ public class GameAudioManager : MonoBehaviour
 
         if (scene.name == "JoinByBrowsing" || scene.name.Contains("Menu"))
         {
+            StopGameplayMusic(0.5f);
             PlayMenuMusic();
         }
         else if (scene.name == "GameScene")
         {
-            StopMenuMusic(1.2f);
+            StopMenuMusic(1.0f);
+
+            // Inicia música da partida após a cutscene da queda do avião (ou direto se cutscene já rodou / não houver)
+            if (AirplaneCrashCutsceneController.Instance != null && AirplaneCrashCutsceneController.Instance.IsCutsceneActive)
+            {
+                AirplaneCrashCutsceneController.Instance.OnCutsceneFinished -= HandleCutsceneFinishedForMusic;
+                AirplaneCrashCutsceneController.Instance.OnCutsceneFinished += HandleCutsceneFinishedForMusic;
+            }
+            else
+            {
+                StartGameplayMusic(1.2f);
+            }
         }
+    }
+
+    private void HandleCutsceneFinishedForMusic()
+    {
+        if (AirplaneCrashCutsceneController.Instance != null)
+        {
+            AirplaneCrashCutsceneController.Instance.OnCutsceneFinished -= HandleCutsceneFinishedForMusic;
+        }
+        StartGameplayMusic(1.2f);
     }
 
     private void EnsureAudioSourcesCreated()
@@ -186,6 +225,16 @@ public class GameAudioManager : MonoBehaviour
             musicSource.spatialBlend = 0f;
             musicSource.volume = menuMusicVolume;
             musicSource.mute = IsMasterMuted;
+        }
+
+        if (gameplayMusicSource == null)
+        {
+            gameplayMusicSource = gameObject.AddComponent<AudioSource>();
+            gameplayMusicSource.playOnAwake = false;
+            gameplayMusicSource.loop = false;
+            gameplayMusicSource.spatialBlend = 0f;
+            gameplayMusicSource.volume = gameplayMusicBaseVolume * MusicVolume;
+            gameplayMusicSource.mute = IsMasterMuted || IsMusicMuted;
         }
 
         if (uiSource == null)
@@ -276,6 +325,21 @@ public class GameAudioManager : MonoBehaviour
             pauseOpenClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Leohpaz/RPG_Essentials_Free/10_UI_Menu_SFX/092_Pause_04.wav");
         if (pauseCloseClip == null)
             pauseCloseClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Leohpaz/RPG_Essentials_Free/10_UI_Menu_SFX/098_Unpause_04.wav");
+
+        // Fogos de comemoração de vitória
+        if (victoryFireworksClip == null)
+            victoryFireworksClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/FREE CASUAL MUSIC PACK/BONUS 2 - SFX/FIREWORKS 3.wav");
+
+        // Loops do tema Casual Theme 2 para gameplay
+        if (casualTheme2Loops == null || casualTheme2Loops.Length == 0 || casualTheme2Loops[0] == null)
+        {
+            casualTheme2Loops = new AudioClip[]
+            {
+                UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/FREE CASUAL MUSIC PACK/CASUAL THEME 2/CASUAL THEME 2 - LOOP 1.wav"),
+                UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/FREE CASUAL MUSIC PACK/CASUAL THEME 2/CASUAL THEME 2 - LOOP 2.wav"),
+                UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/FREE CASUAL MUSIC PACK/CASUAL THEME 2/CASUAL THEME 2 - LOOP 3.wav")
+            };
+        }
 #endif
     }
 
@@ -283,6 +347,8 @@ public class GameAudioManager : MonoBehaviour
 
     public const string MasterVolumePrefKey = "EOTWH_MasterVolume";
     public const string AudioMutedPrefKey = "EOTWH_AudioMuted";
+    public const string MusicVolumePrefKey = "EOTWH_MusicVolume";
+    public const string MusicMutedPrefKey = "EOTWH_MusicMuted";
 
     public static float MasterVolume
     {
@@ -309,10 +375,37 @@ public class GameAudioManager : MonoBehaviour
         }
     }
 
+    public static float MusicVolume
+    {
+        get => PlayerPrefs.GetFloat(MusicVolumePrefKey, 0.35f);
+        set
+        {
+            float clamped = Mathf.Clamp01(value);
+            PlayerPrefs.SetFloat(MusicVolumePrefKey, clamped);
+            PlayerPrefs.Save();
+            ApplyGlobalAudioSettings();
+            OnMusicVolumeChanged?.Invoke(clamped);
+        }
+    }
+
+    public static bool IsMusicMuted
+    {
+        get => PlayerPrefs.GetInt(MusicMutedPrefKey, 0) == 1;
+        set
+        {
+            PlayerPrefs.SetInt(MusicMutedPrefKey, value ? 1 : 0);
+            PlayerPrefs.Save();
+            ApplyGlobalAudioSettings();
+            OnMusicMuteChanged?.Invoke(value);
+        }
+    }
+
     public bool IsMenuMuted => IsMasterMuted;
 
     public static event System.Action<float> OnMasterVolumeChanged;
     public static event System.Action<bool> OnMasterMuteChanged;
+    public static event System.Action<float> OnMusicVolumeChanged;
+    public static event System.Action<bool> OnMusicMuteChanged;
 
     public event System.Action<bool> OnMenuMuteStateChanged
     {
@@ -322,13 +415,26 @@ public class GameAudioManager : MonoBehaviour
 
     public static void ApplyGlobalAudioSettings()
     {
-        bool muted = IsMasterMuted;
-        float vol = MasterVolume;
-        AudioListener.volume = muted ? 0f : vol;
+        bool masterMuted = IsMasterMuted;
+        float masterVol = MasterVolume;
+        AudioListener.volume = masterMuted ? 0f : masterVol;
 
-        if (Instance != null && Instance.musicSource != null)
+        bool musicMuted = masterMuted || IsMusicMuted;
+        float musicVol = MusicVolume;
+
+        if (Instance != null)
         {
-            Instance.musicSource.mute = muted;
+            if (Instance.musicSource != null)
+            {
+                Instance.musicSource.mute = musicMuted;
+                Instance.musicSource.volume = Instance.menuMusicVolume * musicVol;
+            }
+
+            if (Instance.gameplayMusicSource != null)
+            {
+                Instance.gameplayMusicSource.mute = musicMuted;
+                Instance.gameplayMusicSource.volume = Instance.gameplayMusicBaseVolume * musicVol;
+            }
         }
     }
 
@@ -339,6 +445,15 @@ public class GameAudioManager : MonoBehaviour
             IsMasterMuted = false;
         }
         MasterVolume = volume;
+    }
+
+    public void SetMusicVolumeLevel(float volume)
+    {
+        if (volume > 0.01f && IsMusicMuted)
+        {
+            IsMusicMuted = false;
+        }
+        MusicVolume = volume;
     }
 
     public void ToggleMenuMute()
@@ -359,6 +474,16 @@ public class GameAudioManager : MonoBehaviour
     public void SetAudioMute(bool muted)
     {
         IsMasterMuted = muted;
+    }
+
+    public void ToggleMusicMute()
+    {
+        IsMusicMuted = !IsMusicMuted;
+    }
+
+    public void SetMusicMute(bool muted)
+    {
+        IsMusicMuted = muted;
     }
 
     #endregion
@@ -426,6 +551,137 @@ public class GameAudioManager : MonoBehaviour
         musicSource.Stop();
         musicSource.volume = startVol;
         musicFadeCoroutine = null;
+    }
+
+    #endregion
+
+    #region Música de Fundo da Partida (Casual Theme 2) & Vitória
+
+    /// <summary>
+    /// Inicia o ciclo contínuo dos loops de Casual Theme 2 durante a partida.
+    /// O volume padrão é balanceado e suave para não encobrir os efeitos sonoros da gameplay.
+    /// </summary>
+    public void StartGameplayMusic(float fadeInDuration = 1.0f)
+    {
+        EnsureAudioSourcesCreated();
+        EnsureClipsLoaded();
+        ApplyGlobalAudioSettings();
+
+        if (casualTheme2Loops == null || casualTheme2Loops.Length == 0) return;
+
+        if (isGameplayMusicActive && gameplayMusicSource != null && gameplayMusicSource.isPlaying) return;
+
+        isGameplayMusicActive = true;
+        if (gameplayMusicCoroutine != null) StopCoroutine(gameplayMusicCoroutine);
+        gameplayMusicCoroutine = StartCoroutine(GameplayMusicPlaylistRoutine(fadeInDuration));
+    }
+
+    /// <summary>
+    /// Para a música da gameplay com fade-out suave.
+    /// </summary>
+    public void StopGameplayMusic(float fadeOutDuration = 1.0f)
+    {
+        isGameplayMusicActive = false;
+        if (gameplayMusicCoroutine != null)
+        {
+            StopCoroutine(gameplayMusicCoroutine);
+            gameplayMusicCoroutine = null;
+        }
+
+        if (gameplayMusicSource == null || !gameplayMusicSource.isPlaying) return;
+
+        if (gameplayMusicFadeCoroutine != null) StopCoroutine(gameplayMusicFadeCoroutine);
+        gameplayMusicFadeCoroutine = StartCoroutine(FadeOutGameplayMusicRoutine(fadeOutDuration));
+    }
+
+    private IEnumerator GameplayMusicPlaylistRoutine(float initialFadeInDuration)
+    {
+        int currentIndex = 0;
+        bool isFirst = true;
+
+        while (isGameplayMusicActive)
+        {
+            if (casualTheme2Loops == null || casualTheme2Loops.Length == 0) yield break;
+
+            AudioClip clip = casualTheme2Loops[currentIndex % casualTheme2Loops.Length];
+            if (clip == null) yield break;
+
+            gameplayMusicSource.clip = clip;
+            gameplayMusicSource.loop = false;
+            gameplayMusicSource.mute = IsMasterMuted || IsMusicMuted;
+
+            float targetVol = gameplayMusicBaseVolume * MusicVolume;
+
+            if (isFirst && initialFadeInDuration > 0.05f)
+            {
+                gameplayMusicSource.volume = 0f;
+                gameplayMusicSource.Play();
+
+                float t = 0f;
+                while (t < initialFadeInDuration && isGameplayMusicActive)
+                {
+                    t += Time.unscaledDeltaTime;
+                    targetVol = gameplayMusicBaseVolume * MusicVolume;
+                    gameplayMusicSource.volume = Mathf.Lerp(0f, targetVol, t / initialFadeInDuration);
+                    yield return null;
+                }
+                isFirst = false;
+            }
+            else
+            {
+                gameplayMusicSource.volume = targetVol;
+                gameplayMusicSource.Play();
+            }
+
+            float duration = clip.length;
+            float elapsed = 0f;
+            while (elapsed < duration - 0.08f && isGameplayMusicActive)
+            {
+                elapsed += Time.unscaledDeltaTime;
+                if (gameplayMusicFadeCoroutine == null && gameplayMusicSource != null)
+                {
+                    gameplayMusicSource.volume = gameplayMusicBaseVolume * MusicVolume;
+                    gameplayMusicSource.mute = IsMasterMuted || IsMusicMuted;
+                }
+                yield return null;
+            }
+
+            currentIndex++;
+        }
+    }
+
+    private IEnumerator FadeOutGameplayMusicRoutine(float duration)
+    {
+        if (gameplayMusicSource == null) yield break;
+
+        float startVol = gameplayMusicSource.volume;
+        float t = 0f;
+        while (t < duration)
+        {
+            t += Time.unscaledDeltaTime;
+            if (gameplayMusicSource != null)
+            {
+                gameplayMusicSource.volume = Mathf.Lerp(startVol, 0f, t / duration);
+            }
+            yield return null;
+        }
+
+        if (gameplayMusicSource != null)
+        {
+            gameplayMusicSource.Stop();
+            gameplayMusicSource.volume = gameplayMusicBaseVolume * MusicVolume;
+        }
+        gameplayMusicFadeCoroutine = null;
+    }
+
+    /// <summary>
+    /// Executa o som de vitória com fogos de artifício (FIREWORKS 3) em 2D para quem venceu a partida.
+    /// </summary>
+    public void PlayVictoryFireworks()
+    {
+        EnsureClipsLoaded();
+        if (victoryFireworksClip == null) return;
+        Play2D(victoryFireworksClip, volume: 0.90f, pitch: 1.0f);
     }
 
     #endregion

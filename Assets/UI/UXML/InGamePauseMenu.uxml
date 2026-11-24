@@ -20,15 +20,33 @@
                     <ui:Label name="pause-header-title" text="OPÇÕES" class="pause-header-title" picking-mode="Ignore" />
                 </ui:VisualElement>
 
-                <!-- Controle de Volume & Mute integrado (Ícone clicável + Slider) -->
-                <ui:VisualElement name="pause-audio-section" class="pause-audio-section">
-                    <ui:Button name="btn-toggle-mute" class="btn-mute" focusable="false" tooltip="Mutar / Desmutar áudio">
-                        <ui:VisualElement name="mute-icon" class="mute-icon" picking-mode="Ignore" />
-                    </ui:Button>
-                    <ui:VisualElement class="pause-slider-track-wrap">
-                        <ui:Slider name="pause-volume-slider" low-value="0" high-value="100" value="100" class="pause-volume-slider" />
+                <!-- Controles de Áudio: Volume Geral/SFX e Volume da Música -->
+                <ui:VisualElement name="pause-audio-group" class="pause-audio-group">
+
+                    <!-- Linha 1: Volume Geral / SFX -->
+                    <ui:VisualElement name="pause-audio-section-master" class="pause-audio-section">
+                        <ui:Label text="SOM" class="pause-audio-label" picking-mode="Ignore" />
+                        <ui:Button name="btn-toggle-mute" class="btn-mute" focusable="false" tooltip="Mutar / Desmutar som geral">
+                            <ui:VisualElement name="mute-icon" class="mute-icon" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:VisualElement class="pause-slider-track-wrap">
+                            <ui:Slider name="pause-volume-slider" low-value="0" high-value="100" value="100" class="pause-volume-slider" />
+                        </ui:VisualElement>
+                        <ui:Label name="pause-volume-percent" text="100%" class="pause-volume-percent" />
                     </ui:VisualElement>
-                    <ui:Label name="pause-volume-percent" text="100%" class="pause-volume-percent" />
+
+                    <!-- Linha 2: Volume da Música -->
+                    <ui:VisualElement name="pause-audio-section-music" class="pause-audio-section">
+                        <ui:Label text="MÚSICA" class="pause-audio-label" picking-mode="Ignore" />
+                        <ui:Button name="btn-toggle-music-mute" class="btn-mute" focusable="false" tooltip="Mutar / Desmutar música">
+                            <ui:VisualElement name="music-mute-icon" class="music-icon" picking-mode="Ignore" />
+                        </ui:Button>
+                        <ui:VisualElement class="pause-slider-track-wrap">
+                            <ui:Slider name="pause-music-slider" low-value="0" high-value="100" value="35" class="pause-volume-slider" />
+                        </ui:VisualElement>
+                        <ui:Label name="pause-music-percent" text="35%" class="pause-volume-percent" />
+                    </ui:VisualElement>
+
                 </ui:VisualElement>
 
                 <ui:VisualElement class="pause-divider" picking-mode="Ignore" />

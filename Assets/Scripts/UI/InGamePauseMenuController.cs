@@ -30,6 +30,9 @@ public class InGamePauseMenuController : MonoBehaviour
     private const string PauseCardName = "pause-card";
     private const string MuteButtonName = "btn-toggle-mute";
     private const string MuteLabelName = "mute-label";
+    private const string MusicMuteButtonName = "btn-toggle-music-mute";
+    private const string MusicSliderName = "pause-music-slider";
+    private const string MusicPercentLabelName = "pause-music-percent";
     private const string LeaveMatchButtonName = "btn-leave-match";
     private const string QuitGameButtonName = "btn-quit-game";
     private const string ToggleHudButtonName = "btn-toggle-hud";
@@ -81,6 +84,9 @@ public class InGamePauseMenuController : MonoBehaviour
     private Label muteLabel;
     private Slider volumeSlider;
     private Label volumePercentLabel;
+    private Button musicMuteButton;
+    private Slider musicSlider;
+    private Label musicPercentLabel;
     private Button leaveMatchButton;
     private Button quitGameButton;
     private Button toggleHudButton;
@@ -173,8 +179,11 @@ public class InGamePauseMenuController : MonoBehaviour
     {
         GameAudioManager.OnMasterVolumeChanged += OnGlobalAudioVolumeChanged;
         GameAudioManager.OnMasterMuteChanged += OnGlobalAudioMuteChanged;
+        GameAudioManager.OnMusicVolumeChanged += OnGlobalMusicVolumeChanged;
+        GameAudioManager.OnMusicMuteChanged += OnGlobalMusicMuteChanged;
         BindUI();
         RefreshMuteButtonVisual();
+        RefreshMusicVisuals();
         ApplyOverlayState(open: false);
     }
 
@@ -209,6 +218,8 @@ public class InGamePauseMenuController : MonoBehaviour
     {
         GameAudioManager.OnMasterVolumeChanged -= OnGlobalAudioVolumeChanged;
         GameAudioManager.OnMasterMuteChanged -= OnGlobalAudioMuteChanged;
+        GameAudioManager.OnMusicVolumeChanged -= OnGlobalMusicVolumeChanged;
+        GameAudioManager.OnMusicMuteChanged -= OnGlobalMusicMuteChanged;
         UnbindUI();
         RestoreGameplayInputState(keepCursorUnlocked: IsLeavingMatch);
         IsMenuOpen = false;
@@ -222,6 +233,16 @@ public class InGamePauseMenuController : MonoBehaviour
     private void OnGlobalAudioMuteChanged(bool muted)
     {
         RefreshMuteButtonVisual();
+    }
+
+    private void OnGlobalMusicVolumeChanged(float vol)
+    {
+        RefreshMusicVisuals();
+    }
+
+    private void OnGlobalMusicMuteChanged(bool muted)
+    {
+        RefreshMusicVisuals();
     }
 
     private void OnDestroy()
@@ -331,6 +352,8 @@ public class InGamePauseMenuController : MonoBehaviour
         SaveAndUnlockCursor();
         DisableLocalCameraControllers();
         PlayerController.LocalInstance?.CancelTaskInteraction();
+        RefreshMuteButtonVisual();
+        RefreshMusicVisuals();
         ApplyOverlayState(open: true);
     }
 
@@ -409,6 +432,15 @@ public class InGamePauseMenuController : MonoBehaviour
         SaveAndUnlockCursor();
         DisableLocalCameraControllers();
         PlayerController.LocalInstance?.CancelTaskInteraction();
+
+        // Para a música da gameplay suavemente
+        GameAudioManager.Instance?.StopGameplayMusic(1.0f);
+
+        // Se venceu a partida, executa o som de fogos comemorativos (FIREWORKS 3)
+        if (isVictory)
+        {
+            GameAudioManager.Instance?.PlayVictoryFireworks();
+        }
 
         if (gameOverTitleLabel != null) gameOverTitleLabel.text = title;
         if (gameOverSubtitleLabel != null) gameOverSubtitleLabel.text = subtitle;
@@ -587,6 +619,9 @@ public class InGamePauseMenuController : MonoBehaviour
         muteLabel = docRoot.Q<Label>(MuteLabelName);
         volumeSlider = docRoot.Q<Slider>("pause-volume-slider");
         volumePercentLabel = docRoot.Q<Label>("pause-volume-percent");
+        musicMuteButton = docRoot.Q<Button>(MusicMuteButtonName);
+        musicSlider = docRoot.Q<Slider>(MusicSliderName);
+        musicPercentLabel = docRoot.Q<Label>(MusicPercentLabelName);
         leaveMatchButton = docRoot.Q<Button>(LeaveMatchButtonName);
         quitGameButton = docRoot.Q<Button>(QuitGameButtonName);
         toggleHudButton = docRoot.Q<Button>(ToggleHudButtonName);
@@ -617,6 +652,16 @@ public class InGamePauseMenuController : MonoBehaviour
         if (volumeSlider != null)
         {
             volumeSlider.RegisterValueChangedCallback(OnVolumeSliderChanged);
+        }
+
+        if (musicMuteButton != null)
+        {
+            musicMuteButton.clicked += ToggleMusicMute;
+        }
+
+        if (musicSlider != null)
+        {
+            musicSlider.RegisterValueChangedCallback(OnMusicSliderChanged);
         }
 
         if (leaveMatchButton != null)
@@ -670,6 +715,16 @@ public class InGamePauseMenuController : MonoBehaviour
         if (volumeSlider != null)
         {
             volumeSlider.UnregisterValueChangedCallback(OnVolumeSliderChanged);
+        }
+
+        if (musicMuteButton != null)
+        {
+            musicMuteButton.clicked -= ToggleMusicMute;
+        }
+
+        if (musicSlider != null)
+        {
+            musicSlider.UnregisterValueChangedCallback(OnMusicSliderChanged);
         }
 
         if (leaveMatchButton != null)
@@ -797,6 +852,100 @@ public class InGamePauseMenuController : MonoBehaviour
             int pct = muted ? 0 : Mathf.RoundToInt(currentVol * 100f);
             volumePercentLabel.text = $"{pct}%";
         }
+
+        RefreshMusicVisuals();
+    }
+
+    /// <summary>
+    /// Alterna o estado de mudo da música da partida.
+    /// </summary>
+    public void ToggleMusicMute()
+    {
+        if (GameAudioManager.Instance != null)
+        {
+            GameAudioManager.Instance.ToggleMusicMute();
+            if (GameAudioManager.IsMusicMuted)
+                GameAudioManager.Instance.PlayButtonCancel();
+            else
+                GameAudioManager.Instance.PlayButtonConfirm();
+        }
+        else
+        {
+            bool nextMuted = !LoadMusicMutedPreference();
+            SetMusicMuted(nextMuted);
+        }
+        RefreshMusicVisuals();
+    }
+
+    /// <summary>
+    /// Define explicitamente se a música está mutada e persiste em PlayerPrefs.
+    /// </summary>
+    public void SetMusicMuted(bool muted)
+    {
+        if (GameAudioManager.Instance != null)
+        {
+            GameAudioManager.Instance.SetMusicMute(muted);
+        }
+        else
+        {
+            PlayerPrefs.SetInt(GameAudioManager.MusicMutedPrefKey, muted ? 1 : 0);
+            PlayerPrefs.Save();
+        }
+        RefreshMusicVisuals();
+    }
+
+    private static bool LoadMusicMutedPreference()
+    {
+        return PlayerPrefs.GetInt(GameAudioManager.MusicMutedPrefKey, 0) == 1;
+    }
+
+    private void OnMusicSliderChanged(ChangeEvent<float> evt)
+    {
+        float newMusicVol01 = Mathf.Clamp01(evt.newValue / 100f);
+        if (GameAudioManager.Instance != null)
+        {
+            GameAudioManager.Instance.SetMusicVolumeLevel(newMusicVol01);
+            GameAudioManager.Instance.PlaySliderTick();
+        }
+        else
+        {
+            PlayerPrefs.SetFloat(GameAudioManager.MusicVolumePrefKey, newMusicVol01);
+            if (newMusicVol01 > 0.01f && PlayerPrefs.GetInt(GameAudioManager.MusicMutedPrefKey, 0) == 1)
+            {
+                PlayerPrefs.SetInt(GameAudioManager.MusicMutedPrefKey, 0);
+            }
+            PlayerPrefs.Save();
+        }
+
+        RefreshMusicVisuals();
+    }
+
+    private void RefreshMusicVisuals()
+    {
+        bool isMasterMuted = GameAudioManager.IsMasterMuted;
+        bool isMusicMuted = GameAudioManager.IsMusicMuted;
+        bool effectiveMuted = isMasterMuted || isMusicMuted;
+        float currentMusicVol = GameAudioManager.MusicVolume;
+
+        if (musicMuteButton != null)
+        {
+            musicMuteButton.EnableInClassList(MuteButtonMutedClass, effectiveMuted);
+        }
+
+        if (musicSlider != null)
+        {
+            float targetVal = effectiveMuted ? 0f : (currentMusicVol * 100f);
+            if (Mathf.Abs(musicSlider.value - targetVal) > 0.5f)
+            {
+                musicSlider.SetValueWithoutNotify(targetVal);
+            }
+        }
+
+        if (musicPercentLabel != null)
+        {
+            int pct = effectiveMuted ? 0 : Mathf.RoundToInt(currentMusicVol * 100f);
+            musicPercentLabel.text = $"{pct}%";
+        }
     }
 
     private void SetActionButtonsInteractable(bool interactable, string leavingLabel)
@@ -845,6 +994,7 @@ public class InGamePauseMenuController : MonoBehaviour
 
         // Sinaliza para a cena de saguão (JoinByBrowsing) abrir direto no menu de escolher sala
         LobbyMenuFlowController.ForceReturnToRoomBrowser = true;
+        GameAudioManager.Instance?.StopGameplayMusic(0.5f);
 
         yield return LeaveActiveMultiplayerSessionsCoroutine(timeoutSeconds: 3f);
         yield return ShutdownNetworkManagerCoroutine(timeoutSeconds: 2f);

@@ -858,6 +858,7 @@ public class GameSpawner : NetworkBehaviour
         {
             isMatchTimerRunningNetVar.Value = true;
             Debug.Log("[GameSpawner] 5 segundos de spawn da Morte concluídos! Cronômetro de partida de 5 minutos iniciado.");
+            GameAudioManager.Instance?.StartGameplayMusic(1.5f);
 
             // A Morte aterrissou no solo! Agora a partida começou de verdade: libera as tasks para os sobreviventes
             if (TaskManager.Instance != null)
@@ -1039,6 +1040,14 @@ public class GameSpawner : NetworkBehaviour
         if (InGamePauseMenuController.Instance != null)
         {
             InGamePauseMenuController.Instance.ShowGameOver(localWon, gameOverTitle, ptSubtitle, ptDescription, duration);
+        }
+        else
+        {
+            GameAudioManager.Instance?.StopGameplayMusic(1.0f);
+            if (localWon)
+            {
+                GameAudioManager.Instance?.PlayVictoryFireworks();
+            }
         }
 
         StartCoroutine(GameOverCountdownRoutine(duration));
