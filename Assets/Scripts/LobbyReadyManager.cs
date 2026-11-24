@@ -66,6 +66,8 @@ public class LobbyReadyManager : NetworkBehaviour
         readyPlayerNames = new NetworkList<FixedString64Bytes>();
         ConfiguredNpcCount = FixedNpcCount;
         PlayerPrefs.SetInt("Lobby_NpcCount", FixedNpcCount);
+
+        Blocks.Sessions.Common.PlayerListViewElement.IsPlayerReadyCallback = CheckIfPlayerIsReady;
     }
 
     private void OnEnable()
@@ -589,17 +591,17 @@ public class LobbyReadyManager : NetworkBehaviour
     [ClientRpc]
     private void NotifyReadyStatusChangedClientRpc()
     {
-        OnReadyStatusChanged?.Invoke();
+        FireReadyStatusChanged();
     }
 
     private void OnReadyAuthIdsListChanged(NetworkListEvent<FixedString64Bytes> changeEvent)
     {
-        OnReadyStatusChanged?.Invoke();
+        FireReadyStatusChanged();
     }
 
     private void OnReadyNamesListChanged(NetworkListEvent<FixedString64Bytes> changeEvent)
     {
-        OnReadyStatusChanged?.Invoke();
+        FireReadyStatusChanged();
     }
 
     private void OnReadyListChanged(NetworkListEvent<ulong> changeEvent)
@@ -625,7 +627,13 @@ public class LobbyReadyManager : NetworkBehaviour
             EvaluateAllPlayersReady();
         }
 
+        FireReadyStatusChanged();
+    }
+
+    private void FireReadyStatusChanged()
+    {
         OnReadyStatusChanged?.Invoke();
+        Blocks.Sessions.Common.PlayerListViewElement.TriggerRefresh();
     }
 
     /// <summary>

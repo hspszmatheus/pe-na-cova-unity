@@ -7,6 +7,14 @@ namespace Blocks.Sessions.Common
     [UxmlElement]
     public partial class PlayerListViewElement : ListView
     {
+        public static System.Func<string, string, bool> IsPlayerReadyCallback;
+        public static event System.Action OnReadyStateChanged;
+
+        public static void TriggerRefresh()
+        {
+            OnReadyStateChanged?.Invoke();
+        }
+
         private const string k_PlayerListIsEmptyLabel = "Aguardando outros jogadores entrarem...";
 
         private string m_SessionType;
@@ -82,7 +90,7 @@ namespace Blocks.Sessions.Common
                             if (readyBadge != null)
                             {
                                 readyBadge.style.display = DisplayStyle.Flex;
-                                bool isReady = global::LobbyReadyManager.IsPlayerReady(vm.Id, vm.Name);
+                                bool isReady = IsPlayerReadyCallback != null && IsPlayerReadyCallback.Invoke(vm.Id, vm.Name);
                                 if (isReady)
                                 {
                                     readyBadge.text = "✔ PRONTO";
@@ -112,14 +120,14 @@ namespace Blocks.Sessions.Common
 
         private void OnDetachFromPanelEvent(DetachFromPanelEvent panelEvent)
         {
-            global::LobbyReadyManager.OnReadyStatusChanged -= HandleReadyStatusChanged;
+            OnReadyStateChanged -= HandleReadyStatusChanged;
             CleanupBindings();
         }
 
         private void OnAttachToPanelEvent(AttachToPanelEvent panelEvent)
         {
             UpdateBindingSources();
-            global::LobbyReadyManager.OnReadyStatusChanged += HandleReadyStatusChanged;
+            OnReadyStateChanged += HandleReadyStatusChanged;
         }
 
         private void HandleReadyStatusChanged()

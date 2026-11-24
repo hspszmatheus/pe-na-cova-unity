@@ -82733,8 +82733,6 @@ MonoBehaviour:
   hunterAlertDelayAfterCompletion: 3.35
   hunterAlertDuration: 5
   playerNextTaskCooldown: 10
-  minTasksRequired: 7
-  tasksPerSurvivor: 3
   kickObjectWeight: 33.333
   kickHunterWeight: 33.333
   danceNearHunterWeight: 33.333
@@ -82743,6 +82741,8 @@ MonoBehaviour:
   taskInactivityTimeout: 85
   inactivityAlertDuration: 10
   postAlertTaskCooldown: 10
+  minTasksRequired: 7
+  tasksPerSurvivor: 3
 --- !u!114 &1870746273
 MonoBehaviour:
   m_ObjectHideFlags: 0
