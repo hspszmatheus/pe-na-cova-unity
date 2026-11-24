@@ -71,7 +71,8 @@ MonoBehaviour:
   meteorLandingClip: {fileID: 8300000, guid: eaae8fe8d600e1f459f34aa5757fa3b8, type: 3}
   playerKickSwingClip: {fileID: 8300000, guid: 323e15cfe809e114ab92c9f4b25e8bc2, type: 3}
   playerKickHitClip: {fileID: 8300000, guid: 8b23b175a78d6b5458322e3a6c9905d0, type: 3}
-  playerDeathClip: {fileID: 8300000, guid: 566d2ea6240b489479a6e9fd608c2621, type: 3}
+  hunterKickScreamClip: {fileID: 8300000, guid: bea42fcb18edb59459fb5fd7bffc9b82, type: 3}
+  playerDeathClip: {fileID: 8300000, guid: 50353330ce7fd4c40aeb0255068a2312, type: 3}
   markedForDeathClip: {fileID: 8300000, guid: acbcb75601b0082458fda8807f67c813, type: 3}
   taskStartClip: {fileID: 8300000, guid: ba39bf8baf6d13046889b2d64822381a, type: 3}
   taskCompleteClip: {fileID: 8300000, guid: cfce0cea076109f478783201b2a9f57f, type: 3}

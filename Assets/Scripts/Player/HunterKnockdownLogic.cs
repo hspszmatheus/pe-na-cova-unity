@@ -247,6 +247,7 @@ public class HunterKnockdownLogic : NetworkBehaviour
     public void ApplyKick(Vector3 kickDir)
     {
         GameAudioManager.Instance?.PlayPlayerKickHit(transform.position);
+        GameAudioManager.Instance?.PlayHunterKickScream(transform.position);
 
         if (characterController == null) characterController = GetComponent<CharacterController>();
         if (movementLogic == null) movementLogic = GetComponent<PlayerMovementLogic>();

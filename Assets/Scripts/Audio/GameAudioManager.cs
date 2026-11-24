@@ -105,7 +105,9 @@ public class GameAudioManager : MonoBehaviour
     [SerializeField] private AudioClip playerKickSwingClip;
     [Tooltip("Chute acertando o Hunter")]
     [SerializeField] private AudioClip playerKickHitClip;
-    [Tooltip("Morte / Eliminação do jogador")]
+    [Tooltip("Grito do Hunter ao ser atingido por um chute")]
+    [SerializeField] private AudioClip hunterKickScreamClip;
+    [Tooltip("Morte / Eliminação do jogador ou NPC")]
     [SerializeField] private AudioClip playerDeathClip;
     [Tooltip("Aura roxa de marcado para a morte")]
     [SerializeField] private AudioClip markedForDeathClip;
@@ -307,8 +309,10 @@ public class GameAudioManager : MonoBehaviour
             playerKickSwingClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Leohpaz/RPG_Essentials_Free/12_Player_Movement_SFX/56_Attack_03.wav");
         if (playerKickHitClip == null)
             playerKickHitClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Leohpaz/RPG_Essentials_Free/12_Player_Movement_SFX/61_Hit_03.wav");
-        if (playerDeathClip == null)
-            playerDeathClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Leohpaz/RPG_Essentials_Free/10_Battle_SFX/69_Enemy_death_01.wav");
+        if (hunterKickScreamClip == null)
+            hunterKickScreamClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/grito_hunter.wav");
+        if (playerDeathClip == null || playerDeathClip.name.Contains("Enemy_death"))
+            playerDeathClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Audio/grito_player_e_npcs.mp3");
         if (markedForDeathClip == null)
             markedForDeathClip = UnityEditor.AssetDatabase.LoadAssetAtPath<AudioClip>("Assets/Leohpaz/RPG_Essentials_Free/8_Buffs_Heals_SFX/21_Debuff_01.wav");
 
@@ -916,9 +920,24 @@ public class GameAudioManager : MonoBehaviour
         PlaySpatialSound(playerKickHitClip, position, volume: 0.90f, minDistance: 2.5f, maxDistance: 30f, pitch: Random.Range(0.92f, 1.04f));
     }
 
+    /// <summary>
+    /// Grito do Hunter emitido quando ele é atingido por um chute (flying kick) de um sobrevivente.
+    /// </summary>
+    public void PlayHunterKickScream(Vector3 position)
+    {
+        EnsureClipsLoaded();
+        if (hunterKickScreamClip == null) return;
+        PlaySpatialSound(hunterKickScreamClip, position, volume: 1.0f, minDistance: 3.0f, maxDistance: 45f, pitch: Random.Range(0.97f, 1.03f));
+    }
+
+    /// <summary>
+    /// Grito de morte emitido quando um jogador ou NPC é eliminado pela Morte (foice ou bola de fogo).
+    /// </summary>
     public void PlayPlayerDeath(Vector3 position)
     {
-        PlaySpatialSound(playerDeathClip, position, volume: 0.95f, minDistance: 4f, maxDistance: 40f, pitch: Random.Range(0.95f, 1.05f));
+        EnsureClipsLoaded();
+        if (playerDeathClip == null) return;
+        PlaySpatialSound(playerDeathClip, position, volume: 1.0f, minDistance: 4f, maxDistance: 45f, pitch: Random.Range(0.96f, 1.04f));
     }
 
     public void PlayMarkedForDeath(Vector3 position)
