@@ -73,7 +73,9 @@ namespace Blocks.Sessions.Common
 
         void OnSessionChanged()
         {
-            DisplayText = $"{m_Session.Players.Count} / {m_Session.MaxPlayers} Jogadores";
+            int max = m_Session != null ? Mathf.Min(8, m_Session.MaxPlayers) : 8;
+            int count = m_Session != null && m_Session.Players != null ? Mathf.Clamp(m_Session.Players.Count, 0, max) : 0;
+            DisplayText = $"{count} / {max} Jogadores";
         }
 
         public void Dispose()

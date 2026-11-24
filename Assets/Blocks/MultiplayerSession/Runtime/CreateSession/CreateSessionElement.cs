@@ -106,6 +106,7 @@ namespace Blocks.Sessions
                 }
 
                 var options = SessionSettings.ToSessionOptions();
+                options.MaxPlayers = Mathf.Clamp(options.MaxPlayers, 1, 8);
                 if (string.IsNullOrEmpty(Unity.Services.Authentication.AuthenticationService.Instance.PlayerName))
                 {
                     string nick = PlayerPrefs.GetString("SavedPlayerNickname", "Player");

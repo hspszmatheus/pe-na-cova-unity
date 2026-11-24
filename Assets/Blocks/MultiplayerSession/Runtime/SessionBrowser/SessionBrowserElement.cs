@@ -261,7 +261,12 @@ namespace Blocks.Sessions
 
             // register a local converter to display relevant session properties as a formatted string
             sessionPlayerCountBinding.sourceToUiConverters
-                .AddConverter((ref SessionInfoViewModel session) => $"{session.MaxPlayers - session.AvailableSlots}/{session.MaxPlayers} Jogadores");
+                .AddConverter((ref SessionInfoViewModel session) =>
+                {
+                    int max = Mathf.Min(8, session.MaxPlayers);
+                    int current = Mathf.Clamp(session.MaxPlayers - session.AvailableSlots, 0, max);
+                    return $"{current}/{max} Jogadores";
+                });
 
             sessionPlayerCountLabel.SetBinding(nameof(Label.text), sessionPlayerCountBinding);
 

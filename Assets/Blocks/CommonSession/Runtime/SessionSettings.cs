@@ -11,8 +11,8 @@ namespace Blocks.Sessions.Common
     public class SessionSettings : ScriptableObject
     {
         [Header("Session options")]
-        [Tooltip("Maximum number of players allowed in the session.")]
-        public int maxPlayers = 16;
+        [Tooltip("Maximum number of players allowed in the session (Máximo de 8 jogadores).")]
+        public int maxPlayers = 8;
         [Tooltip("The name of the created session. It can be used to display the list of existing sessions in the UI.")]
         public string sessionName = "default-session-name";
         [Tooltip("The Session Type is used to uniquely identify a type of session locally. This is used to reference a session through the Kits elements.")]
@@ -74,7 +74,7 @@ namespace Blocks.Sessions.Common
         {
             return new SessionOptions
             {
-                MaxPlayers = maxPlayers,
+                MaxPlayers = Mathf.Clamp(maxPlayers, 1, 8),
                 Name = sessionName,
                 Type = sessionType,
             };
