@@ -826,6 +826,7 @@ public class PlayerController : NetworkBehaviour
     [Header("Sistema de Tasks")]
     private float currentTaskHoldTime = 0f;
     private bool isInteractingWithTask = false;
+    private float lastTaskStartSoundTime = 0f;
     private readonly HashSet<int> localCompletedTaskIndices = new HashSet<int>();
     private int currentAssignedTaskIndex = -1;
     public int CurrentAssignedTaskIndex => currentAssignedTaskIndex;
@@ -1347,10 +1348,19 @@ public class PlayerController : NetworkBehaviour
                 if (!isInteractingWithTask)
                 {
                     isInteractingWithTask = true;
-                    GameAudioManager.Instance?.PlayTaskStart(nearestTask.transform.position);
                     if (animationLogic != null)
                     {
                         animationLogic.SetTaskInteractionAnimation(true);
+                    }
+
+                    if (Time.time - lastTaskStartSoundTime > 0.5f)
+                    {
+                        lastTaskStartSoundTime = Time.time;
+                        GameAudioManager.Instance?.PlayTaskStart(nearestTask.transform.position);
+                        if (IsSpawned)
+                        {
+                            TriggerTaskStartSoundServerRpc(nearestTask.transform.position);
+                        }
                     }
                 }
 
@@ -1447,6 +1457,19 @@ public class PlayerController : NetworkBehaviour
         {
             TaskManager.Instance.OnPlayerCompletedTask(OwnerClientId, taskIndex);
         }
+    }
+
+    [ServerRpc]
+    private void TriggerTaskStartSoundServerRpc(Vector3 taskPosition)
+    {
+        TriggerTaskStartSoundClientRpc(taskPosition);
+    }
+
+    [ClientRpc]
+    private void TriggerTaskStartSoundClientRpc(Vector3 taskPosition)
+    {
+        if (IsOwner) return; // O executor local já tocou o som imediatamente
+        GameAudioManager.Instance?.PlayTaskStart(taskPosition);
     }
 
     public void OnLocalTaskCompletedConfirmed(int taskIndex)

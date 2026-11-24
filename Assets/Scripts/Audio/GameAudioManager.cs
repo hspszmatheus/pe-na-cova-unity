@@ -670,8 +670,13 @@ public class GameAudioManager : MonoBehaviour
         PlaySpatialSound(markedForDeathClip, position, volume: 0.90f, minDistance: 3f, maxDistance: 35f);
     }
 
+    /// <summary>
+    /// Som de início ou progresso de interação com task. Emitido espacialmente no cenário para que todos próximos ouçam.
+    /// </summary>
     public void PlayTaskStart(Vector3 position)
     {
+        EnsureClipsLoaded();
+        if (taskStartClip == null) return;
         PlaySpatialSound(taskStartClip, position, volume: 0.70f, minDistance: 1.5f, maxDistance: 18f, pitch: Random.Range(0.96f, 1.04f));
     }
 
@@ -694,9 +699,15 @@ public class GameAudioManager : MonoBehaviour
         PlaySpatialSound(clip, position, volume: 0.85f, minDistance: 6f, maxDistance: 70f, pitch: 0.95f);
     }
 
-    public void PlayTaskComplete(Vector3 position)
+    /// <summary>
+    /// Som de conclusão de task. Executado exclusivamente em 2D para o jogador local que realizou a tarefa.
+    /// Não propaga pelo mundo em 3D para evitar poluição sonora e não revelar a conclusão aos outros.
+    /// </summary>
+    public void PlayTaskComplete(Vector3 position = default)
     {
-        PlaySpatialSound(taskCompleteClip, position, volume: 0.90f, minDistance: 3f, maxDistance: 30f, pitch: 1.0f);
+        EnsureClipsLoaded();
+        if (taskCompleteClip == null) return;
+        Play2D(taskCompleteClip, volume: 0.90f, pitch: 1.0f);
     }
 
     #endregion

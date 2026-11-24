@@ -693,9 +693,7 @@ public class NPCController : NetworkBehaviour
                 }
                 if (stateTimer <= 0f)
                 {
-                    // Fim do fingimento de task (exatamente igual ao player). Não contabiliza task!
-                    Vector3 completionPos = currentPretendTask != null ? currentPretendTask.transform.position : transform.position;
-                    GameAudioManager.Instance?.PlayTaskComplete(completionPos);
+                    // Fim do fingimento de task (exatamente igual ao player). Não contabiliza task e não toca som de conclusão!
                     currentPretendTask = null;
                     isNavigatingToPretendTask = false;
                     SetState(NpcState.Idle, Random.Range(1.2f, 2.5f));
@@ -824,7 +822,7 @@ public class NPCController : NetworkBehaviour
 
             if (IsSpawned)
             {
-                PlayTaskInteractClientRpc(true);
+                PlayTaskInteractClientRpc(true, soundPos);
             }
         }
 
@@ -1527,7 +1525,7 @@ public class NPCController : NetworkBehaviour
     }
 
     [ClientRpc]
-    private void PlayTaskInteractClientRpc(bool isInteracting)
+    private void PlayTaskInteractClientRpc(bool isInteracting, Vector3 soundPos = default)
     {
         if (IsServer) return; // Servidor já executou localmente
 
@@ -1537,19 +1535,12 @@ public class NPCController : NetworkBehaviour
             animationLogic.SetTaskInteractionAnimation(isInteracting);
         }
 
-        Vector3 soundPos = currentPretendTask != null ? currentPretendTask.transform.position : transform.position;
         if (isInteracting)
         {
-            GameAudioManager.Instance?.PlayTaskStart(soundPos);
+            Vector3 pos = soundPos != default ? soundPos : (currentPretendTask != null ? currentPretendTask.transform.position : transform.position);
+            GameAudioManager.Instance?.PlayTaskStart(pos);
         }
-        else
-        {
-            GameAudioManager.Instance?.PlayTaskComplete(transform.position);
-            if (PlayerController.LocalPlayer != null && PlayerController.LocalPlayer.IsHunter)
-            {
-                GameAudioManager.Instance?.PlayHunterTaskAlert(transform.position);
-            }
-        }
+        // Fim da task fingida do NPC: apenas desativa animação, sem tocar som de conclusão e sem emitir alerta ao Hunter
     }
 
     /// <summary>
