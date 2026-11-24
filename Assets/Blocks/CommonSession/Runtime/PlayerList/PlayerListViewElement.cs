@@ -53,20 +53,49 @@ namespace Blocks.Sessions.Common
                 {
                     var vm = itemsSource[index] as PlayerViewModel;
                     var roleBadge = element.Q<Label>("CartoonRoleBadge");
-                    if (roleBadge != null && vm != null)
+                    var readyBadge = element.Q<Label>("CartoonReadyBadge");
+
+                    if (vm != null)
                     {
                         if (vm.IsHost)
                         {
-                            roleBadge.text = "★ LÍDER";
-                            roleBadge.style.display = DisplayStyle.Flex;
-                            roleBadge.RemoveFromClassList("cartoon-player-role-badge--survivor");
-                            roleBadge.AddToClassList("cartoon-player-role-badge--host");
+                            if (roleBadge != null)
+                            {
+                                roleBadge.text = "★ LÍDER";
+                                roleBadge.style.display = DisplayStyle.Flex;
+                                roleBadge.RemoveFromClassList("cartoon-player-role-badge--survivor");
+                                roleBadge.AddToClassList("cartoon-player-role-badge--host");
+                            }
+                            if (readyBadge != null)
+                            {
+                                readyBadge.style.display = DisplayStyle.None;
+                            }
                         }
                         else
                         {
-                            // Sobreviventes que entram na sala não possuem tag; apenas o líder exibe badge
-                            roleBadge.style.display = DisplayStyle.None;
-                            roleBadge.text = string.Empty;
+                            if (roleBadge != null)
+                            {
+                                roleBadge.style.display = DisplayStyle.None;
+                                roleBadge.text = string.Empty;
+                            }
+
+                            if (readyBadge != null)
+                            {
+                                readyBadge.style.display = DisplayStyle.Flex;
+                                bool isReady = global::LobbyReadyManager.IsPlayerReady(vm.Id, vm.Name);
+                                if (isReady)
+                                {
+                                    readyBadge.text = "✔ PRONTO";
+                                    readyBadge.RemoveFromClassList("cartoon-player-role-badge--waiting");
+                                    readyBadge.AddToClassList("cartoon-player-role-badge--ready");
+                                }
+                                else
+                                {
+                                    readyBadge.text = "AGUARDANDO...";
+                                    readyBadge.RemoveFromClassList("cartoon-player-role-badge--ready");
+                                    readyBadge.AddToClassList("cartoon-player-role-badge--waiting");
+                                }
+                            }
                         }
                     }
                 }
@@ -76,17 +105,30 @@ namespace Blocks.Sessions.Common
 
             RegisterCallback<AttachToPanelEvent>(OnAttachToPanelEvent);
             RegisterCallback<DetachFromPanelEvent>(OnDetachFromPanelEvent);
+
+            schedule.Execute(HandleReadyStatusChanged).Every(500);
         }
 
 
         private void OnDetachFromPanelEvent(DetachFromPanelEvent panelEvent)
         {
+            global::LobbyReadyManager.OnReadyStatusChanged -= HandleReadyStatusChanged;
             CleanupBindings();
         }
 
         private void OnAttachToPanelEvent(AttachToPanelEvent panelEvent)
         {
             UpdateBindingSources();
+            global::LobbyReadyManager.OnReadyStatusChanged += HandleReadyStatusChanged;
+        }
+
+        private void HandleReadyStatusChanged()
+        {
+            try
+            {
+                RefreshItems();
+            }
+            catch { }
         }
 
         private void UpdateBindingSources()
@@ -154,12 +196,23 @@ namespace Blocks.Sessions.Common
             infoBox.Add(playerNameLabel);
             row.Add(infoBox);
 
-            // Badge de função (LÍDER exibido exclusivamente para o Host; Sobreviventes não exibem tag)
+            // Badges no lado direito da linha do jogador (Líder / Pronto / Aguardando)
+            var badgesContainer = new VisualElement { name = "CartoonBadgesContainer" };
+            badgesContainer.AddToClassList("cartoon-player-badges-container");
+
             var roleBadge = new Label("★ LÍDER") { name = "CartoonRoleBadge" };
             roleBadge.AddToClassList("cartoon-player-role-badge");
             roleBadge.AddToClassList("cartoon-player-role-badge--host");
             roleBadge.style.display = DisplayStyle.None;
-            row.Add(roleBadge);
+            badgesContainer.Add(roleBadge);
+
+            var readyBadge = new Label("AGUARDANDO...") { name = "CartoonReadyBadge" };
+            readyBadge.AddToClassList("cartoon-player-role-badge");
+            readyBadge.AddToClassList("cartoon-player-role-badge--waiting");
+            readyBadge.style.display = DisplayStyle.None;
+            badgesContainer.Add(readyBadge);
+
+            row.Add(badgesContainer);
 
             return row;
         }

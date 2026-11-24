@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Collections;
 using Unity.Netcode;
 using Unity.Services.Multiplayer;
 using UnityEngine;
@@ -9,6 +10,9 @@ using UnityEngine.SceneManagement;
 
 public class LobbyReadyManager : NetworkBehaviour
 {
+    public static LobbyReadyManager Instance { get; private set; }
+    public static event System.Action OnReadyStatusChanged;
+
     [Header("Configuração de Cena")]
     [SerializeField] private string gameSceneName = "GameScene";
 
@@ -32,6 +36,9 @@ public class LobbyReadyManager : NetworkBehaviour
     );
 
     private NetworkList<ulong> readyPlayerIds;
+    private NetworkList<FixedString64Bytes> readyPlayerAuthIds;
+    private NetworkList<FixedString64Bytes> readyPlayerNames;
+    private readonly Dictionary<ulong, (string authId, string playerName)> clientIdentityMap = new Dictionary<ulong, (string, string)>();
 
     private Button readyBtn;
     private Button startBtn;
@@ -53,7 +60,10 @@ public class LobbyReadyManager : NetworkBehaviour
 
     private void Awake()
     {
+        Instance = this;
         readyPlayerIds = new NetworkList<ulong>();
+        readyPlayerAuthIds = new NetworkList<FixedString64Bytes>();
+        readyPlayerNames = new NetworkList<FixedString64Bytes>();
         ConfiguredNpcCount = FixedNpcCount;
         PlayerPrefs.SetInt("Lobby_NpcCount", FixedNpcCount);
     }
@@ -151,6 +161,8 @@ public class LobbyReadyManager : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         readyPlayerIds.OnListChanged += OnReadyListChanged;
+        readyPlayerAuthIds.OnListChanged += OnReadyAuthIdsListChanged;
+        readyPlayerNames.OnListChanged += OnReadyNamesListChanged;
         npcCountNetVar.OnValueChanged += OnNpcCountNetworkChanged;
 
         // O jogador entrou ou criou uma sala, então mostramos a coluna da direita!
@@ -166,6 +178,15 @@ public class LobbyReadyManager : NetworkBehaviour
             {
                 try { readyPlayerIds.Clear(); } catch { }
             }
+            if (readyPlayerAuthIds != null)
+            {
+                try { readyPlayerAuthIds.Clear(); } catch { }
+            }
+            if (readyPlayerNames != null)
+            {
+                try { readyPlayerNames.Clear(); } catch { }
+            }
+            clientIdentityMap.Clear();
 
             ClearPendingJoining();
 
@@ -219,6 +240,8 @@ public class LobbyReadyManager : NetworkBehaviour
     public override void OnNetworkDespawn()
     {
         readyPlayerIds.OnListChanged -= OnReadyListChanged;
+        readyPlayerAuthIds.OnListChanged -= OnReadyAuthIdsListChanged;
+        readyPlayerNames.OnListChanged -= OnReadyNamesListChanged;
         npcCountNetVar.OnValueChanged -= OnNpcCountNetworkChanged;
 
         if (IsServer && NetworkManager.Singleton != null)
@@ -229,6 +252,11 @@ public class LobbyReadyManager : NetworkBehaviour
 
         ClearPendingJoining();
         UnbindSession();
+
+        if (Instance == this)
+        {
+            Instance = null;
+        }
 
         // O jogador saiu ou a sala foi desfeita, então escondemos a coluna novamente
         if (rightColumn != null)
@@ -473,28 +501,105 @@ public class LobbyReadyManager : NetworkBehaviour
             readyPlayerIds.Remove(clientId);
         }
 
+        if (clientIdentityMap.TryGetValue(clientId, out var identity))
+        {
+            if (!string.IsNullOrEmpty(identity.authId))
+            {
+                FixedString64Bytes aId = identity.authId;
+                for (int i = readyPlayerAuthIds.Count - 1; i >= 0; i--)
+                {
+                    if (readyPlayerAuthIds[i] == aId) readyPlayerAuthIds.RemoveAt(i);
+                }
+            }
+            if (!string.IsNullOrEmpty(identity.playerName))
+            {
+                FixedString64Bytes pName = identity.playerName;
+                for (int i = readyPlayerNames.Count - 1; i >= 0; i--)
+                {
+                    if (readyPlayerNames[i] == pName) readyPlayerNames.RemoveAt(i);
+                }
+            }
+            clientIdentityMap.Remove(clientId);
+        }
+
         EvaluateAllPlayersReady();
+        NotifyReadyStatusChangedClientRpc();
     }
 
     private void OnReadyButtonClicked()
     {
         if (!IsClient || IsServer) return;
-        ToggleReadyServerRpc(NetworkManager.Singleton.LocalClientId);
+
+        string myAuthId = "";
+        try
+        {
+            if (Unity.Services.Authentication.AuthenticationService.Instance != null && Unity.Services.Authentication.AuthenticationService.Instance.IsSignedIn)
+            {
+                myAuthId = Unity.Services.Authentication.AuthenticationService.Instance.PlayerId;
+            }
+        }
+        catch { }
+
+        string myName = PlayerNameUIManager.GetActivePlayerNickname();
+        ToggleReadyServerRpc(NetworkManager.Singleton.LocalClientId, myAuthId, myName);
     }
 
     [ServerRpc(RequireOwnership = false)]
-    private void ToggleReadyServerRpc(ulong clientId)
+    private void ToggleReadyServerRpc(ulong clientId, FixedString64Bytes authId, FixedString64Bytes playerName)
     {
-        if (readyPlayerIds.Contains(clientId))
+        bool wasReady = readyPlayerIds.Contains(clientId);
+        if (wasReady)
         {
             readyPlayerIds.Remove(clientId);
+
+            if (!authId.IsEmpty)
+            {
+                for (int i = readyPlayerAuthIds.Count - 1; i >= 0; i--)
+                {
+                    if (readyPlayerAuthIds[i] == authId) readyPlayerAuthIds.RemoveAt(i);
+                }
+            }
+            if (!playerName.IsEmpty)
+            {
+                for (int i = readyPlayerNames.Count - 1; i >= 0; i--)
+                {
+                    if (readyPlayerNames[i] == playerName) readyPlayerNames.RemoveAt(i);
+                }
+            }
+            clientIdentityMap.Remove(clientId);
         }
         else
         {
             readyPlayerIds.Add(clientId);
+            if (!authId.IsEmpty && !readyPlayerAuthIds.Contains(authId))
+            {
+                readyPlayerAuthIds.Add(authId);
+            }
+            if (!playerName.IsEmpty && !readyPlayerNames.Contains(playerName))
+            {
+                readyPlayerNames.Add(playerName);
+            }
+            clientIdentityMap[clientId] = (authId.ToString(), playerName.ToString());
         }
 
         EvaluateAllPlayersReady();
+        NotifyReadyStatusChangedClientRpc();
+    }
+
+    [ClientRpc]
+    private void NotifyReadyStatusChangedClientRpc()
+    {
+        OnReadyStatusChanged?.Invoke();
+    }
+
+    private void OnReadyAuthIdsListChanged(NetworkListEvent<FixedString64Bytes> changeEvent)
+    {
+        OnReadyStatusChanged?.Invoke();
+    }
+
+    private void OnReadyNamesListChanged(NetworkListEvent<FixedString64Bytes> changeEvent)
+    {
+        OnReadyStatusChanged?.Invoke();
     }
 
     private void OnReadyListChanged(NetworkListEvent<ulong> changeEvent)
@@ -519,6 +624,43 @@ public class LobbyReadyManager : NetworkBehaviour
         {
             EvaluateAllPlayersReady();
         }
+
+        OnReadyStatusChanged?.Invoke();
+    }
+
+    /// <summary>
+    /// Verifica se o jogador especificado por authId ou nickname está com status PRONTO na sala.
+    /// </summary>
+    public bool CheckIfPlayerIsReady(string authId, string playerName)
+    {
+        if (!string.IsNullOrEmpty(authId) && readyPlayerAuthIds != null)
+        {
+            for (int i = 0; i < readyPlayerAuthIds.Count; i++)
+            {
+                if (readyPlayerAuthIds[i].ToString() == authId) return true;
+            }
+        }
+
+        if (!string.IsNullOrEmpty(playerName) && readyPlayerNames != null)
+        {
+            string cleanTarget = playerName.Trim();
+            for (int i = 0; i < readyPlayerNames.Count; i++)
+            {
+                string cleanReady = readyPlayerNames[i].ToString().Trim();
+                if (string.Equals(cleanReady, cleanTarget, System.StringComparison.OrdinalIgnoreCase)) return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Método estático utilitário para a UI consultar o status de pronto de um sobrevivente na sala.
+    /// </summary>
+    public static bool IsPlayerReady(string authId, string playerName)
+    {
+        if (Instance == null) return false;
+        return Instance.CheckIfPlayerIsReady(authId, playerName);
     }
 
     private void EvaluateAllPlayersReady()

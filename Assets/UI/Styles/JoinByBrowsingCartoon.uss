@@ -1016,6 +1016,34 @@
     color: #FFFFFF;
 }
 
+.cartoon-player-badges-container {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.cartoon-player-role-badge--ready {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_green.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 14;
+    -unity-slice-bottom: 14;
+    color: #FFFFFF;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+}
+
+.cartoon-player-role-badge--waiting {
+    background-image: url("../Sprites/Cartoon/cartoon_btn_disabled.png");
+    -unity-background-scale-mode: stretch-to-fill;
+    -unity-slice-left: 14;
+    -unity-slice-right: 14;
+    -unity-slice-top: 14;
+    -unity-slice-bottom: 14;
+    color: #E2CEB5;
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.3);
+}
+
 .cartoon-player-empty-box {
     padding: 24px;
     align-items: center;
