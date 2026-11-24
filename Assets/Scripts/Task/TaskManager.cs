@@ -135,9 +135,28 @@ public class TaskManager : NetworkBehaviour
     [SerializeField] private float postAlertTaskCooldown = 10.0f;
     public float PostAlertTaskCooldown => postAlertTaskCooldown;
 
+    [Header("Configuração de Quantidade de Tarefas")]
+    [Tooltip("Quantidade mínima de tarefas que uma partida pode exigir (Padrão: 7)")]
+    [SerializeField] private int minTasksRequired = 7;
+
+    [Tooltip("Quantidade de tarefas adicionadas por sobrevivente na partida (Padrão: 3)")]
+    [SerializeField] private int tasksPerSurvivor = 3;
+
+    public int MinTasksRequired
+    {
+        get => minTasksRequired;
+        set => minTasksRequired = Mathf.Max(1, value);
+    }
+
+    public int TasksPerSurvivor
+    {
+        get => tasksPerSurvivor;
+        set => tasksPerSurvivor = Mathf.Max(1, value);
+    }
+
     [Header("Sincronização de Rede")]
     public readonly NetworkVariable<int> TotalTasksRequired = new NetworkVariable<int>(
-        3,
+        7,
         NetworkVariableReadPermission.Everyone,
         NetworkVariableWritePermission.Server
     );
@@ -236,16 +255,22 @@ public class TaskManager : NetworkBehaviour
     }
 
     /// <summary>
-    /// Retorna a quantidade de tasks totais de acordo com a tabela do jogo:
-    /// 1 jogador -> 3 tasks
-    /// 2 jogadores -> 6 tasks
-    /// ...
-    /// N jogadores -> N * 3 tasks
+    /// Retorna a quantidade de tasks totais de acordo com as regras do jogo:
+    /// - O mínimo de tasks começa em 7.
+    /// - Escala proporcionalmente por sobrevivente com base na quantidade configurada (padrão: 3 por sobrevivente).
     /// </summary>
-    public static int GetRequiredTasksForPlayerCount(int playerCount)
+    public static int GetRequiredTasksForPlayerCount(int playerCount, int minTasks = 7, int perSurvivor = 3)
     {
         int safeCount = Mathf.Max(1, playerCount);
-        return safeCount * 3;
+        return Mathf.Max(minTasks, safeCount * perSurvivor);
+    }
+
+    /// <summary>
+    /// Retorna a quantidade de tasks totais para esta instância com base nas propriedades configuradas no Inspector.
+    /// </summary>
+    public int GetRequiredTasksForPlayerCount(int playerCount)
+    {
+        return GetRequiredTasksForPlayerCount(playerCount, minTasksRequired, tasksPerSurvivor);
     }
 
     /// <summary>

@@ -415,6 +415,8 @@ public class GameSpawner : NetworkBehaviour
         }
     }
 
+    public const int MaxPlayersPerRoom = 8;
+
     /// <summary>
     /// Rejeita qualquer tentativa de conexão após o início do jogo (Regra: Sem Late Join).
     /// </summary>
@@ -429,13 +431,13 @@ public class GameSpawner : NetworkBehaviour
             return;
         }
 
-        // Limite máximo de 16 jogadores na sala/partida
-        if (NetworkManager.Singleton != null && NetworkManager.Singleton.ConnectedClientsIds.Count >= 16)
+        // Limite máximo de 8 jogadores na sala/partida
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.ConnectedClientsIds.Count >= MaxPlayersPerRoom)
         {
             response.Approved = false;
-            response.Reason = "A sala já atingiu o limite máximo de 16 jogadores.";
+            response.Reason = $"A sala já atingiu o limite máximo de {MaxPlayersPerRoom} jogadores.";
             response.Pending = false;
-            Debug.LogWarning($"[GameSpawner] Conexão bloqueada para Client {request.ClientNetworkId}: Limite máximo de 16 jogadores atingido.");
+            Debug.LogWarning($"[GameSpawner] Conexão bloqueada para Client {request.ClientNetworkId}: Limite máximo de {MaxPlayersPerRoom} jogadores atingido.");
             return;
         }
 
@@ -646,14 +648,12 @@ public class GameSpawner : NetworkBehaviour
 
     /// <summary>
     /// Calcula a quantidade de Hunters proporcional ao número total de jogadores na partida:
-    /// - 1 a 7 jogadores: 1 Hunter
-    /// - 8 a 12 jogadores: 2 Hunters
-    /// - 13 a 16 jogadores: 3 Hunters
+    /// - Até 5 jogadores: 1 Hunter (ex: até 5 jogadores -> 4 sobreviventes e 1 hunter)
+    /// - 6 jogadores em diante (6 a 8 jogadores): 2 Hunters (ex: numa partida de 6 jogadores -> 4 sobreviventes e 2 hunters)
     /// </summary>
     public static int GetHunterCount(int totalPlayers)
     {
-        if (totalPlayers >= 13) return 3;
-        if (totalPlayers >= 8) return 2;
+        if (totalPlayers >= 6) return 2;
         return 1;
     }
 

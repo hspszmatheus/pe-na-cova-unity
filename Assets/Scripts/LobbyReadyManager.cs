@@ -12,6 +12,9 @@ public class LobbyReadyManager : NetworkBehaviour
     [Header("Configuração de Cena")]
     [SerializeField] private string gameSceneName = "GameScene";
 
+    [Header("Configuração de Limite da Sala")]
+    public const int MaxPlayersPerRoom = 8;
+
     [Header("Configuração de NPCs (Fixo em 80)")]
     public const int FixedNpcCount = 80;
 
@@ -168,10 +171,10 @@ public class LobbyReadyManager : NetworkBehaviour
 
             if (NetworkManager.Singleton != null)
             {
-                NetworkManager.Singleton.ConnectionApprovalCallback = null;
                 if (NetworkManager.Singleton.NetworkConfig != null)
                 {
-                    NetworkManager.Singleton.NetworkConfig.ConnectionApproval = false;
+                    NetworkManager.Singleton.NetworkConfig.ConnectionApproval = true;
+                    NetworkManager.Singleton.ConnectionApprovalCallback = LobbyConnectionApprovalCheck;
                 }
 
                 NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
@@ -220,6 +223,10 @@ public class LobbyReadyManager : NetworkBehaviour
 
         if (IsServer && NetworkManager.Singleton != null)
         {
+            if (NetworkManager.Singleton.ConnectionApprovalCallback == LobbyConnectionApprovalCheck)
+            {
+                NetworkManager.Singleton.ConnectionApprovalCallback = null;
+            }
             NetworkManager.Singleton.OnClientConnectedCallback -= OnClientConnected;
             NetworkManager.Singleton.OnClientDisconnectCallback -= OnClientDisconnected;
         }
@@ -431,6 +438,23 @@ public class LobbyReadyManager : NetworkBehaviour
         }
     }
 
+    private void LobbyConnectionApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
+    {
+        // Limite máximo de 8 jogadores na sala
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.ConnectedClientsIds.Count >= MaxPlayersPerRoom)
+        {
+            response.Approved = false;
+            response.Reason = $"A sala já atingiu o limite máximo de {MaxPlayersPerRoom} jogadores.";
+            response.Pending = false;
+            Debug.LogWarning($"[LobbyReadyManager] Conexão bloqueada para Client {request.ClientNetworkId}: Limite máximo de {MaxPlayersPerRoom} jogadores atingido.");
+            return;
+        }
+
+        response.Approved = true;
+        response.CreatePlayerObject = false;
+        response.Pending = false;
+    }
+
     private void OnClientConnected(ulong clientId)
     {
         if (!IsServer) return;
@@ -616,5 +640,13 @@ public class LobbyReadyManager : NetworkBehaviour
         npcCountNetVar.Value = FixedNpcCount;
 
         NetworkManager.Singleton.SceneManager.LoadScene(gameSceneName, LoadSceneMode.Single);
+    }
+
+    private void OnDestroy()
+    {
+        if (NetworkManager.Singleton != null && NetworkManager.Singleton.ConnectionApprovalCallback == LobbyConnectionApprovalCheck)
+        {
+            NetworkManager.Singleton.ConnectionApprovalCallback = null;
+        }
     }
 }
