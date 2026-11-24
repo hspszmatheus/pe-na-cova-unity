@@ -239,6 +239,14 @@ public class PlayerTaskIndicatorController : MonoBehaviour
         }
     }
 
+    public void SetCanvasVisible(bool visible)
+    {
+        if (spawnedCanvasObject != null)
+        {
+            spawnedCanvasObject.SetActive(visible);
+        }
+    }
+
     #region Sobrevivente (Survivor) Task Tracking
 
     /// <summary>
@@ -248,13 +256,18 @@ public class PlayerTaskIndicatorController : MonoBehaviour
     public void UpdateTargetTask(int taskIndex)
     {
         if (playerController == null || !playerController.IsOwner || playerController.IsHunter) return;
+        if (playerController.IsDead || playerController.IsGhost || playerController.IsDying)
+        {
+            ClearTarget();
+            return;
+        }
 
         EnsureCanvasCreated();
         if (indicatorManager == null) return;
 
         ClearTarget();
 
-        if (GameSpawner.Instance != null && !GameSpawner.Instance.IsMatchActive)
+        if (GameSpawner.Instance != null && !GameSpawner.Instance.HasMatchStarted && !GameSpawner.Instance.IsMatchActive)
         {
             return;
         }
@@ -280,6 +293,9 @@ public class PlayerTaskIndicatorController : MonoBehaviour
 
         SetPurpleVisualIndicatorPrefab();
 
+        // Garante que a silhueta roxa da task esteja ativa no objeto local
+        targetTask.SetAsLocalTarget(true);
+
         Transform targetAnchor = targetTask.IndicatorTarget;
         if (targetAnchor != null)
         {
@@ -303,13 +319,18 @@ public class PlayerTaskIndicatorController : MonoBehaviour
     public void UpdateTargetHunter(Transform hunterTransform)
     {
         if (playerController == null || !playerController.IsOwner || playerController.IsHunter) return;
+        if (playerController.IsDead || playerController.IsGhost || playerController.IsDying)
+        {
+            ClearTarget();
+            return;
+        }
 
         EnsureCanvasCreated();
         if (indicatorManager == null) return;
 
         ClearTarget();
 
-        if (GameSpawner.Instance != null && !GameSpawner.Instance.IsMatchActive)
+        if (GameSpawner.Instance != null && !GameSpawner.Instance.HasMatchStarted && !GameSpawner.Instance.IsMatchActive)
         {
             return;
         }
@@ -701,13 +722,21 @@ public class PlayerTaskIndicatorController : MonoBehaviour
 
     private void LateUpdate()
     {
+        bool isAlive = playerController != null && !playerController.IsDead && !playerController.IsGhost && !playerController.IsDying;
+
         if (spawnedCanvasObject != null)
         {
-            bool hudVisible = GameHUDController.Instance == null || GameHUDController.Instance.IsHudVisible;
+            bool hudVisible = (GameHUDController.Instance == null || GameHUDController.Instance.IsHudVisible) && isAlive;
             if (spawnedCanvasObject.activeSelf != hudVisible)
             {
                 spawnedCanvasObject.SetActive(hudVisible);
             }
+        }
+
+        if (!isAlive)
+        {
+            if (isTracking) ClearTarget();
+            return;
         }
 
         // 1. Para o Hunter local: varre e sincroniza todos os sobreviventes marcados para a morte e atualiza suas âncoras no mundo
@@ -765,10 +794,10 @@ public class PlayerTaskIndicatorController : MonoBehaviour
             }
         }
 
-        // 2. Para o Sobrevivente local: se a task atribuída for Chutar a Morte ou Dançar Próximo à Morte, sincroniza a âncora e o rastreamento do Hunter
-        if (playerController != null && playerController.IsOwner && !playerController.IsHunter)
+        // 2. Para o Sobrevivente local:
+        if (playerController != null && playerController.IsOwner && !playerController.IsHunter && isAlive)
         {
-            if (GameSpawner.Instance != null && !GameSpawner.Instance.IsMatchActive)
+            if (GameSpawner.Instance != null && !GameSpawner.Instance.HasMatchStarted && !GameSpawner.Instance.IsMatchActive)
             {
                 if (isTracking) ClearTarget();
                 return;
@@ -822,6 +851,27 @@ public class PlayerTaskIndicatorController : MonoBehaviour
                     ClearTarget();
                 }
             }
+            else if (playerController.CurrentAssignedTaskIndex >= 0)
+            {
+                TaskObject.EnsureTasksSorted();
+                var allTasks = TaskObject.AllTasks;
+                if (playerController.CurrentAssignedTaskIndex < allTasks.Count)
+                {
+                    var targetTask = allTasks[playerController.CurrentAssignedTaskIndex];
+                    if (targetTask != null)
+                    {
+                        targetTask.SetAsLocalTarget(true);
+                        if (!isTracking)
+                        {
+                            UpdateTargetTask(playerController.CurrentAssignedTaskIndex);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (isTracking) ClearTarget();
+            }
         }
 
         // Sincronização contínua após a Cinemachine (order 0) e PlayerCameraSetup (order 100)
@@ -850,12 +900,6 @@ public class PlayerTaskIndicatorController : MonoBehaviour
                 {
                     TintVisualIndicator(id, new Color(0.85f, 0.28f, 1.0f, 1.0f));
                 }
-            }
-
-            // Se não estiver rastreando nada ativamente, garante que nenhum indicador fique órfão ou preso no canto da tela
-            if (!isTracking)
-            {
-                CleanupAllVisualIndicators();
             }
         }
     }

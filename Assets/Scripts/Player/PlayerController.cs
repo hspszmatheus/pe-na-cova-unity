@@ -754,11 +754,16 @@ public class PlayerController : NetworkBehaviour
                     float remaining = Mathf.Max(0.5f, nextTaskAvailableTime - Time.time);
                     GameHUDController.Instance?.SetTargetTaskObjective($"Aguardando próximo objetivo ({Mathf.CeilToInt(remaining)}s)...");
                 }
-                else if (GameSpawner.Instance != null && GameSpawner.Instance.IsMatchActive && !GameSpawner.Instance.IsGameOver)
+                else if (GameSpawner.Instance != null && (GameSpawner.Instance.IsMatchActive || GameSpawner.Instance.HasMatchStarted) && !GameSpawner.Instance.IsGameOver)
                 {
                     if (!hasRequestedInitialTask)
                     {
                         hasRequestedInitialTask = true;
+                        TaskManager.Instance?.RequestAssignedTargetTaskRpc(OwnerClientId);
+                    }
+                    else if (Time.time >= nextTaskAvailableTime + 2.5f)
+                    {
+                        nextTaskAvailableTime = Time.time + 3.0f;
                         TaskManager.Instance?.RequestAssignedTargetTaskRpc(OwnerClientId);
                     }
                 }
@@ -943,6 +948,21 @@ public class PlayerController : NetworkBehaviour
     /// </summary>
     public void SetAssignedTargetTask(int taskIndex)
     {
+        if (isDead.Value || isGhost.Value || isDying || isHunter)
+        {
+            currentAssignedTaskIndex = -1;
+            hasAssignedTask = false;
+            TaskObject.ClearAllLocalTargets();
+            taskIndicatorController?.ClearTarget();
+            if (IsOwner)
+            {
+                GameHUDController.Instance?.SetTargetTaskObjective("");
+                GameHUDController.Instance?.SetTaskPrompt(false, "", false);
+                GameHUDController.Instance?.HideSurvivorRevelationTimer();
+            }
+            return;
+        }
+
         TaskObject.EnsureTasksSorted();
         var allTasks = TaskObject.AllTasks;
 
@@ -1437,7 +1457,7 @@ public class PlayerController : NetworkBehaviour
             var allTasks = TaskObject.AllTasks;
             if (taskIndex < allTasks.Count && allTasks[taskIndex] != null)
             {
-                allTasks[taskIndex].RemoveTaskRenderingLayer();
+                allTasks[taskIndex].SetAsLocalTarget(false);
             }
         }
         else if (taskIndex == TaskManager.HunterKickTaskIndex || taskIndex == TaskManager.HunterDanceTaskIndex)
@@ -3055,10 +3075,19 @@ public class PlayerController : NetworkBehaviour
 
         if (IsOwner)
         {
+            currentAssignedTaskIndex = -1;
+            hasAssignedTask = false;
             TaskObject.ClearAllLocalTargets();
             if (taskIndicatorController != null)
             {
                 taskIndicatorController.ClearTarget();
+                taskIndicatorController.SetCanvasVisible(false);
+            }
+            if (GameHUDController.Instance != null)
+            {
+                GameHUDController.Instance.SetTargetTaskObjective("");
+                GameHUDController.Instance.SetTaskPrompt(false, "", false);
+                GameHUDController.Instance.HideSurvivorRevelationTimer();
             }
         }
 
@@ -3121,9 +3150,30 @@ public class PlayerController : NetworkBehaviour
     private void OnGhostStateChanged(bool oldVal, bool newVal)
     {
         UpdateGhostVisuals(newVal);
-        if (IsOwner && GameHUDController.Instance != null)
+        if (newVal)
         {
-            GameHUDController.Instance.SetSpectatorMode(newVal);
+            currentAssignedTaskIndex = -1;
+            hasAssignedTask = false;
+            TaskObject.ClearAllLocalTargets();
+            if (taskIndicatorController != null)
+            {
+                taskIndicatorController.ClearTarget();
+                taskIndicatorController.SetCanvasVisible(false);
+            }
+            if (IsOwner && GameHUDController.Instance != null)
+            {
+                GameHUDController.Instance.SetTargetTaskObjective("");
+                GameHUDController.Instance.SetTaskPrompt(false, "", false);
+                GameHUDController.Instance.HideSurvivorRevelationTimer();
+                GameHUDController.Instance.SetSpectatorMode(true);
+            }
+        }
+        else
+        {
+            if (IsOwner && GameHUDController.Instance != null)
+            {
+                GameHUDController.Instance.SetSpectatorMode(false);
+            }
         }
     }
 

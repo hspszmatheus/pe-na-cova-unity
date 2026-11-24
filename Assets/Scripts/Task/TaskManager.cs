@@ -364,6 +364,21 @@ public class TaskManager : NetworkBehaviour
     }
 
     /// <summary>
+    /// Verifica se o sobrevivente está vivo, ativo e elegível para receber tarefas.
+    /// </summary>
+    public static bool IsSurvivorAliveAndActive(ulong clientId)
+    {
+        if (GameSpawner.Instance == null || !GameSpawner.Instance.IsMatchActive || GameSpawner.Instance.IsGameOver)
+            return false;
+        if (GameSpawner.Instance.IsClientHunter(clientId))
+            return false;
+        var player = PlayerController.GetPlayerByClientId(clientId);
+        if (player == null || !player.IsSpawned || player.IsDead || player.IsGhost || player.IsDying)
+            return false;
+        return true;
+    }
+
+    /// <summary>
     /// Sorteia e atribui uma nova tarefa objetivo para o jogador sobrevivente especificado.
     /// Suporta três tipos de tasks com probabilidades proporcionais configuráveis:
     /// 1. Chutar objetos tasks (cenário)
@@ -374,6 +389,12 @@ public class TaskManager : NetworkBehaviour
     public int AssignNewTargetTaskForPlayer(ulong clientId, bool excludeCurrentlyAssignedToOthers, bool force = false)
     {
         if (!IsServer) return NoTaskIndex;
+
+        if (!IsSurvivorAliveAndActive(clientId))
+        {
+            playerAssignedTasks[clientId] = NoTaskIndex;
+            return NoTaskIndex;
+        }
 
         // Proteção 1: Se o jogador já possui uma tarefa válida atribuída, NUNCA sobrescrever mid-action a menos que force == true!
         if (!force && playerAssignedTasks.TryGetValue(clientId, out int currentAssigned) && IsValidTaskIndex(currentAssigned))
@@ -599,14 +620,9 @@ public class TaskManager : NetworkBehaviour
     public void RequestAssignedTargetTaskRpc(ulong requestingClientId)
     {
         if (!IsServer) return;
-        if (GameSpawner.Instance != null && GameSpawner.Instance.IsClientHunter(requestingClientId))
+        if (!IsSurvivorAliveAndActive(requestingClientId))
         {
-            return; // Hunters não recebem tasks
-        }
-
-        // Se a partida ainda não começou de verdade (a Morte ainda está caindo do céu), não atribui ainda
-        if (GameSpawner.Instance == null || !GameSpawner.Instance.IsMatchActive || GameSpawner.Instance.IsGameOver)
-        {
+            AssignTargetTaskClientRpc(requestingClientId, NoTaskIndex);
             return;
         }
 
@@ -762,6 +778,11 @@ public class TaskManager : NetworkBehaviour
 
         playerCooldownExpiryTimes.Remove(clientId);
 
+        if (!IsSurvivorAliveAndActive(clientId))
+        {
+            yield break;
+        }
+
         if (GameSpawner.Instance != null && !GameSpawner.Instance.IsGameOver && GameSpawner.Instance.IsMatchActive)
         {
             if (GameSpawner.Instance.ActiveNormalPlayerClientIds != null &&
@@ -788,6 +809,11 @@ public class TaskManager : NetworkBehaviour
         {
             foreach (ulong cId in GameSpawner.Instance.ActiveNormalPlayerClientIds)
             {
+                if (!IsSurvivorAliveAndActive(cId))
+                {
+                    continue;
+                }
+
                 // Se o jogador já possui uma task válida ativa, JAMAIS trocar!
                 if (playerAssignedTasks.TryGetValue(cId, out int assigned) && IsValidTaskIndex(assigned))
                 {
@@ -916,14 +942,7 @@ public class TaskManager : NetworkBehaviour
 
         playerInactivityCoroutines.Remove(clientId);
 
-        // Se a partida acabou ou cliente não está mais ativo, encerra
-        if (GameSpawner.Instance == null || GameSpawner.Instance.IsGameOver || !GameSpawner.Instance.IsMatchActive)
-        {
-            yield break;
-        }
-
-        if (GameSpawner.Instance.ActiveNormalPlayerClientIds == null ||
-            !GameSpawner.Instance.ActiveNormalPlayerClientIds.Contains(clientId))
+        if (!IsSurvivorAliveAndActive(clientId))
         {
             yield break;
         }
@@ -947,7 +966,7 @@ public class TaskManager : NetworkBehaviour
 
         // Atualiza o estado visual do jogador marcado (contorno roxo e soulorb visível)
         var targetPlayer = PlayerController.GetPlayerByClientId(markedClientId);
-        if (targetPlayer != null)
+        if (targetPlayer != null && !targetPlayer.IsDead && !targetPlayer.IsGhost && !targetPlayer.IsDying)
         {
             targetPlayer.SetMarkedForDeath(true);
         }

@@ -46,19 +46,24 @@ public class TaskObject : MonoBehaviour
     /// </summary>
     public static void EnsureTasksSorted()
     {
-        if (s_TasksSorted && allTasks.Count > 0) return;
-        allTasks.RemoveAll(t => t == null);
-
-        if (allTasks.Count == 0)
+        if (s_TasksSorted && allTasks.Count > 0)
         {
-            var found = Object.FindObjectsByType<TaskObject>(FindObjectsInactive.Exclude);
-            for (int i = 0; i < found.Length; i++)
+            bool hasNull = false;
+            for (int i = 0; i < allTasks.Count; i++)
             {
-                var t = found[i];
-                if (t != null && t.gameObject.CompareTag(TaskTag) && !allTasks.Contains(t))
-                {
-                    allTasks.Add(t);
-                }
+                if (allTasks[i] == null) { hasNull = true; break; }
+            }
+            if (!hasNull) return;
+        }
+
+        allTasks.Clear();
+        var found = Object.FindObjectsByType<TaskObject>(FindObjectsInactive.Exclude);
+        for (int i = 0; i < found.Length; i++)
+        {
+            var t = found[i];
+            if (t != null && t.gameObject.CompareTag(TaskTag))
+            {
+                allTasks.Add(t);
             }
         }
 
@@ -130,9 +135,8 @@ public class TaskObject : MonoBehaviour
                 var child = transform.Find("IndicatorTarget");
                 if (child != null)
                 {
-                    // Se o anchor existente estiver excessivamente alto (árvores/postes antigos com 10-20m de altura),
-                    // reposiciona para a altura correta ao nível dos olhos (1.6m)
-                    if (child.position.y - transform.position.y > 2.5f)
+                    // Reposiciona para a altura ideal caso esteja deslocado
+                    if (child.position.y - transform.position.y > 2.5f || child.position.y - transform.position.y < 0.2f)
                     {
                         child.position = new Vector3(child.position.x, transform.position.y + 1.6f, child.position.z);
                     }
@@ -141,7 +145,7 @@ public class TaskObject : MonoBehaviour
                 else
                 {
                     var anchor = new GameObject("IndicatorTarget").transform;
-                    var renderers = GetComponentsInChildren<MeshRenderer>();
+                    var renderers = GetComponentsInChildren<Renderer>(true);
                     Vector3 centerPos = transform.position;
                     if (renderers != null && renderers.Length > 0)
                     {
