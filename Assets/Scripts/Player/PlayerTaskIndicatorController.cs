@@ -701,6 +701,15 @@ public class PlayerTaskIndicatorController : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (spawnedCanvasObject != null)
+        {
+            bool hudVisible = GameHUDController.Instance == null || GameHUDController.Instance.IsHudVisible;
+            if (spawnedCanvasObject.activeSelf != hudVisible)
+            {
+                spawnedCanvasObject.SetActive(hudVisible);
+            }
+        }
+
         // 1. Para o Hunter local: varre e sincroniza todos os sobreviventes marcados para a morte e atualiza suas âncoras no mundo
         if (playerController != null && playerController.IsHunter)
         {

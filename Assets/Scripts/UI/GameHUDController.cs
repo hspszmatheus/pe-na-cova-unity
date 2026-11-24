@@ -13,6 +13,7 @@ public class GameHUDController : MonoBehaviour
 
     private bool isHudHiddenByPlayer = false;
     public bool IsHudHiddenByPlayer => isHudHiddenByPlayer;
+    public bool IsHudVisible => !isHudHiddenByPlayer && (root == null || root.style.display != DisplayStyle.None);
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void ResetStaticState()

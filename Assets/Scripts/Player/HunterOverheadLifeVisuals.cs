@@ -321,7 +321,15 @@ public class HunterOverheadLifeVisuals : MonoBehaviour
             return;
         }
 
-        // 3. Visível para todo mundo (tanto sobreviventes quanto hunters) após o jogo começar
+        // 3. Oculta quando o jogador oculta o HUD (atalho P) ou quando o HUD estiver oculto pelo jogo
+        bool isHudHidden = (GameHUDController.Instance != null && (GameHUDController.Instance.IsHudHiddenByPlayer || !GameHUDController.Instance.IsHudVisible));
+        if (isHudHidden)
+        {
+            if (container.activeSelf) container.SetActive(false);
+            return;
+        }
+
+        // 4. Visível para todo mundo (tanto sobreviventes quanto hunters) após o jogo começar
         if (!container.activeSelf) container.SetActive(true);
 
         Camera cam = Camera.main;

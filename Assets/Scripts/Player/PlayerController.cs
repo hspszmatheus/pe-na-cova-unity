@@ -109,8 +109,8 @@ public class PlayerController : NetworkBehaviour
     public HunterSpawnIntroSequence HunterSpawnIntro => hunterSpawnIntro;
 
     [Header("Habilidade da Morte (Revelação Espiritual - Tecla E)")]
-    [Tooltip("Tempo em segundos necessário para segurar a tecla E para conjurar a revelação")]
-    [SerializeField] private float hunterRevealCastDuration = 2.5f;
+    [Tooltip("Tempo em segundos necessário para segurar a tecla E para conjurar a revelação (reduzido para 1.5s para conjuração mais rápida)")]
+    [SerializeField] private float hunterRevealCastDuration = 1.5f;
     [Tooltip("Raio de alcance da revelação ao redor da Morte (em metros, 16.5m - 3x o raio original de 5.5m)")]
     [SerializeField] private float hunterRevealRadius = 16.5f;
     [Tooltip("Duração em segundos da revelação dos sobreviventes pegos no raio")]

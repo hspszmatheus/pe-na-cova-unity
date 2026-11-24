@@ -524,7 +524,7 @@ MonoBehaviour:
   scytheHitEffectPrefab: {fileID: 0}
   handChargeVfxPrefab: {fileID: 0}
   playerSpawnVfxPrefab: {fileID: 7904898002847524615, guid: ccd7acb712c04c1399544a71af7c73df, type: 3}
-  hunterRevealCastDuration: 3
+  hunterRevealCastDuration: 1.5
   hunterRevealRadius: 5.5
   hunterRevealDuration: 5
   hunterRevealCooldown: 15

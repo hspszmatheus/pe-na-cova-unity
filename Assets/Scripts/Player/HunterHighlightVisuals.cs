@@ -374,6 +374,14 @@ public class HunterHighlightVisuals : MonoBehaviour
         // Sobreviventes NUNCA vêem este visual em hipótese alguma.
         // O próprio jogador local da Morte não vê seu próprio orbe no peito.
         // ----------------------------------------------------------------------------------
+        if (GameHUDController.Instance != null && (GameHUDController.Instance.IsHudHiddenByPlayer || !GameHUDController.Instance.IsHudVisible))
+        {
+            if (fireSoulOrbInstance != null && fireSoulOrbInstance.activeSelf) fireSoulOrbInstance.SetActive(false);
+            if (nameplateContainer != null && nameplateContainer.activeSelf) nameplateContainer.SetActive(false);
+            ApplyAllyOutline(false);
+            return;
+        }
+
         var localPlayer = PlayerController.LocalInstance;
 
         // Se o jogador local ainda não existe ou NÃO é um Hunter, oculta tudo:

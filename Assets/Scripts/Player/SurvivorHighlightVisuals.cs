@@ -415,6 +415,14 @@ public class SurvivorHighlightVisuals : MonoBehaviour
         // Conclusão da partida (5s): A aura roxa e o nickname se tornam visíveis para o Hunter também,
         // permitindo ver a localização de todos os sobreviventes que não conseguiu matar!
         // ----------------------------------------------------------------------------------
+        if (GameHUDController.Instance != null && (GameHUDController.Instance.IsHudHiddenByPlayer || !GameHUDController.Instance.IsHudVisible))
+        {
+            if (soulOrbInstance != null && soulOrbInstance.activeSelf) soulOrbInstance.SetActive(false);
+            if (nameplateContainer != null && nameplateContainer.activeSelf) nameplateContainer.SetActive(false);
+            ApplyAllyOutline(false);
+            return;
+        }
+
         var localPlayer = PlayerController.LocalInstance;
         bool isGameOver = GameSpawner.Instance != null && GameSpawner.Instance.IsGameOver;
 
